@@ -38,3 +38,16 @@ def stereo_to_mono(signal, method="sum"):
         raise ValueError(f"Invalid method: {method}.")
 
     return signal
+
+
+def normalize(signal, dbfs=-6):
+    """Normalizes an audio signal to a given dBFS level.
+
+    Args:
+        signal (np.ndarray): The audio signal.
+        dbfs (int, optional): The target dBFS level. Defaults to -6 dBFS.
+
+    Returns:
+        np.ndarray: The normalized audio signal.
+    """
+    return np.power(10, dbfs / 20) * signal
