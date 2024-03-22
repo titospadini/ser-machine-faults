@@ -51,3 +51,35 @@ def normalize(signal, dbfs=-6):
         np.ndarray: The normalized audio signal.
     """
     return np.power(10, dbfs / 20) * signal
+
+
+def resample(signal, input_sampling_frequency, output_sampling_frequency):
+    """
+    Resamples a signal from input_fs to output_fs without using LibROSA.
+
+    Args:
+        signal (np.ndarray): The input signal.
+
+        input_fs (float): The input sampling frequency.
+
+        output_fs (float): The output sampling frequency.
+
+    Returns:
+        np.ndarray: The resampled signal.
+    """
+    # Calculate the resampling factor
+    resampling_factor = output_sampling_frequency / input_sampling_frequency
+
+    # Calculate the number of samples in the input signal
+    num_samples_in = len(signal)
+
+    # Calculate the number of samples in the output signal
+    num_samples_out = int(np.ceil(num_samples_in * resampling_factor))
+
+    # Create an array of indices for interpolation
+    indices = (np.arange(num_samples_out) / resampling_factor)
+
+    # Interpolate the signal using linear interpolation
+    resampled_signal = np.interp(indices, np.arange(num_samples_in), signal)
+
+    return resampled_signal
