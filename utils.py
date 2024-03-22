@@ -83,3 +83,18 @@ def resample(signal, input_sampling_frequency, output_sampling_frequency):
     resampled_signal = np.interp(indices, np.arange(num_samples_in), signal)
 
     return resampled_signal
+
+
+def remove_silence(signal, threshold_dbfs=-40):
+    """Removes silence from an audio signal.
+
+    Args:
+        signal (np.ndarray): The audio signal.
+        threshold_dbfs (int, optional): The threshold in dBFS. Defaults to -40.
+
+    Returns:
+        np.ndarray: The audio signal without silence.
+    """
+    dbfs = 20 * np.log10(np.maximum(np.abs(signal), 1e-10))
+
+    return signal[dbfs > threshold_dbfs]
