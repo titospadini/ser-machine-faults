@@ -1,4 +1,5 @@
 import numpy as np
+import pandas as pd
 import soundfile as sf
 
 def read_audio(path):
@@ -121,3 +122,39 @@ def segment_signal(signal, sampling_rate, segment_duration=200, overlap_duration
         segments.append(signal[i : i + segment_duration_samples])
 
     return np.array(segments)
+
+
+def audio_to_df(path, mixing_method="sum", normalize_dbfs=-6, new_sampling_frequency=16000, silence_threshold_dbfs=-48, segment_duration=500, overlap_duration=10):
+    """Processes an audio file through the pipeline of normalization, resampling, silence removal, and segmentation saves its segments as a Pandas DataFrame.
+
+    Args:
+        path (_type_): _description_
+        mixing_method (str, optional): _description_. Defaults to "sum".
+        normalize_dbfs (int, optional): _description_. Defaults to -6.
+        new_sampling_frequency (int, optional): _description_. Defaults to 16000.
+        silence_threshold_dbfs (int, optional): _description_. Defaults to -48.
+        segment_duration (int, optional): _description_. Defaults to 500.
+        overlap_duration (int, optional): _description_. Defaults to 10.
+
+    Returns:
+        _type_: _description_
+    """
+    data, sampling_frequency = read_audio(path)
+
+    if data.ndim > 1:
+        data = stereo_to_mono(data, method=mixing_method)
+
+    if normalize_dbfs is not None:
+        data = normalize(data, dbfs=normalize_dbfs)
+
+    if sampling_frequency != new_sampling_frequency:
+        data = resample(data, input_sampling_frequency=sampling_frequency, output_sampling_frequency=new_sampling_frequency)
+
+    if silence_threshold_dbfs is not None:
+        data = remove_silence(data, threshold_dbfs=silence_threshold_dbfs)
+
+    segments = segment_signal(data, sampling_rate=new_sampling_frequency, segment_duration=segment_duration, overlap_duration=overlap_duration)
+
+    df = pd.DataFrame(segments)
+
+    return df
