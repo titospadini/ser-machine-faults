@@ -98,3 +98,26 @@ def remove_silence(signal, threshold_dbfs=-40):
     dbfs = 20 * np.log10(np.maximum(np.abs(signal), 1e-10))
 
     return signal[dbfs > threshold_dbfs]
+
+
+def segment_signal(signal, sampling_rate, segment_duration=200, overlap_duration=10):
+    """Segments an audio signal into segments of a given duration.
+
+    Args:
+        signal (np.ndarray): The audio signal.
+        sampling_rate (int): The sampling rate of the audio signal.
+        segment_duration (int, optional): The duration of the segments. Defaults to 200 ms.
+        overlap_duration (int, optional): The duration of the overlap. Defaults to 10 ms.
+
+    Returns:
+        np.ndarray: An array of the audio segments.
+    """
+    segment_duration_samples = int(segment_duration * sampling_rate / 1000)
+    overlap_duration_samples = int(overlap_duration * sampling_rate / 1000)
+
+    segments = []
+
+    for i in range(0, len(signal) - segment_duration_samples, segment_duration_samples - overlap_duration_samples):
+        segments.append(signal[i : i + segment_duration_samples])
+
+    return np.array(segments)
