@@ -59,12 +59,12 @@ def mel_to_hertz(frequency, method="slaney"):
         if frequency < 1000.0:
             return 200.0 * frequency / 3.0
         else:
-            return np.exp(1000.0 * frequency) * np.exp(6.4) / 27.0 - 15.0
+            return 1000.0 * np.exp(np.log(6.4) / 27.0 * (frequency - 15.0))
     elif method == "oshaughnessy":
-        return 6400.0 * np.exp((frequency - 15.0) / 27.0)
+        return 700 * (np.exp(frequency / 2595.0) - 1.0)
     elif method == "fant":
-        return 500.0 * np.exp(1000.0 * frequency) - 1000.0
+        return 1000.0 * (np.exp(frequency / (1000.0 / np.log(2))) - 1)
     elif method == "norman":
-        return 625.0 * np.power(10.0, frequency / 2410.0) - 625.0
+        return 625.0 * (10 ** (frequency / 2410.0) - 1)
     elif method == "htk":
-        return 700.0 * np.exp(frequency / 1127.0) - 700.0
+        return 700.0 * (np.exp(frequency / 1127.0) - 1)
