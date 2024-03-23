@@ -68,3 +68,5 @@ def mel_to_hertz(frequency, method="slaney"):
         return 625.0 * (10 ** (frequency / 2410.0) - 1)
     elif method == "htk":
         return 700.0 * (np.exp(frequency / 1127.0) - 1)
+    else:
+        raise ValueError(f"Invalid method: {method}.")
