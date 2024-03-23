@@ -70,3 +70,27 @@ def mel_to_hertz(frequency, method="slaney"):
         return 700.0 * (np.exp(frequency / 1127.0) - 1)
     else:
         raise ValueError(f"Invalid method: {method}.")
+
+
+def hertz_to_bark(frequency, method="wang"):
+    """Converts a frequency from Hertz to Bark scale.
+
+    Args:
+        frequency (float): The frequency in Hertz.
+        method (str, optional): The method to convert the frequency.
+            Valid methods are:
+                - "wang" (Default)
+                - "traunmuller"
+                - "zwicker"
+
+    Returns:
+        float: The frequency in Bark scale.
+    """
+    if method == "wang":
+        return 6.0 * np.arcsinh(frequency / 600.0)
+    elif method == "traunmuller":
+        return 26.81 * frequency / (1960.0 + frequency) - 0.53
+    elif method == "zwicker":
+        return 13.0 * np.arctan(0.00076 * frequency) + 3.5 * np.arctan((frequency / 7500.0) ** 2)
+    else:
+        raise ValueError(f"Invalid method: {method}.")
