@@ -118,3 +118,24 @@ def bark_to_hertz(frequency, method="wang"):
         return np.tan((frequency - 3.5 * np.arctan((frequency / 7500.0) ** 2)) / 13.0) / 0.00076
     else:
         raise ValueError(f"Invalid method: {method}.")
+
+
+def hertz_to_erb(frequency, method="linear"):
+    """Converts a frequency from Hertz to Equivalent Rectangular Bandwidth (ERB).
+
+    Args:
+        frequency (float): The frequency in Hertz.
+        method (str, optional): The method to convert the frequency.
+            Valid methods are:
+                - "linear" (Default)
+                - "polynomial"
+
+    Returns:
+        float: The frequency in ERB.
+    """
+    if method == "linear":
+        return 24.7 * (0.00437 * frequency + 1)
+    elif method == "polynomial":
+        return 6.23 * frequency ** 2 + 93.39 * frequency + 28.52
+    else:
+        raise ValueError(f"Invalid method: {method}.")
