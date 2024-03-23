@@ -5,7 +5,13 @@ def hertz_to_mel(frequency, method="slaney"):
 
     Args:
         frequency (float): The frequency in Hertz.
-        method (str, optional): The method to convert the frequency. Defaults to "slaney".
+        method (str, optional): The method to convert the frequency.
+            Valid methods are:
+                - "slaney" (Default)
+                - "oshaughnessy"
+                - "fant"
+                - "norman"
+                - "htk"
 
     Raises:
         ValueError: Invalid method.
