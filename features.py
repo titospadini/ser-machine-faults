@@ -34,3 +34,15 @@ def standard_deviation(signal):
         float: The standard deviation of the audio signal.
     """
     return np.std(signal)
+
+
+def median(signal):
+    """Calculates the median of an audio signal.
+
+    Args:
+        signal (np.ndarray): The audio signal.
+
+    Returns:
+        float: The median of the audio signal.
+    """
+    return np.median(signal)
