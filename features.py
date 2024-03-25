@@ -181,3 +181,25 @@ def spectral_bandwidth(signal, sampling_frequency):
         float: The spectral bandwidth of the audio signal.
     """
     return np.sqrt(np.sum(power_spectrum(signal) * (spectrum_frequencies(signal, sampling_frequency) - spectral_centroid(signal, sampling_frequency)) ** 2) / np.sum(power_spectrum(signal)))
+
+
+def feature_extractor(signal, features=["root_mean_square", "zero_crossing_rate"]):
+    """Extracts features from an audio signal.
+
+    Args:
+        signal (np.ndarray): The audio signal.
+
+        features (list, optional): The list of features to extract. Defaults
+        to ["root_mean_square", "zero_crossing_rate"].
+
+    Returns:
+        np.ndarray: Extracted features.
+    """
+    features_values = []
+    for feature in features:
+        if feature == "root_mean_square":
+            features_values.append(root_mean_square(signal))
+        elif feature == "zero_crossing_rate":
+            features_values.append(zero_crossing_rate(signal))
+
+    return np.array(features_values)
