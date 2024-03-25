@@ -106,3 +106,39 @@ def zero_crossing_rate(signal):
         float: The zero crossing rate of the audio signal.
     """
     return zero_crossings(signal) / len(signal)
+
+
+def spectrum(signal):
+    """Calculates the spectrum of an audio signal.
+
+    Args:
+        signal (np.ndarray): The audio signal.
+
+    Returns:
+        np.ndarray: The spectrum of the audio signal.
+    """
+    return np.fft.fft(signal)
+
+
+def amplitude_spectrum(signal):
+    """Calculates the amplitude spectrum of an audio signal.
+
+    Args:
+        signal (np.ndarray): The audio signal.
+
+    Returns:
+        np.ndarray: The amplitude spectrum of the audio signal.
+    """
+    return np.abs(spectrum(signal))
+
+
+def power_spectrum(signal):
+    """Calculates the power spectrum of an audio signal.
+
+    Args:
+        signal (np.ndarray): The audio signal.
+
+    Returns:
+        np.ndarray: The power spectrum of the audio signal.
+    """
+    return amplitude_spectrum(signal) ** 2
