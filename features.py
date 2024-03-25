@@ -168,3 +168,16 @@ def spectral_centroid(signal, sampling_frequency):
         float: The spectral centroid of the audio signal.
     """
     return np.sum(spectrum_frequencies(signal, sampling_frequency) * amplitude_spectrum(signal) / np.sum(amplitude_spectrum(signal)))
+
+
+def spectral_bandwidth(signal, sampling_frequency):
+    """Calculates the spectral bandwidth of an audio signal.
+
+    Args:
+        signal (np.ndarray): The audio signal.
+        sampling_frequency (int): The sampling frequency of the audio signal.
+
+    Returns:
+        float: The spectral bandwidth of the audio signal.
+    """
+    return np.sqrt(np.sum(power_spectrum(signal) * (spectrum_frequencies(signal, sampling_frequency) - spectral_centroid(signal, sampling_frequency)) ** 2) / np.sum(power_spectrum(signal)))
