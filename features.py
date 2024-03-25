@@ -82,3 +82,27 @@ def root_mean_square(signal):
         float: The root mean square of the audio signal.
     """
     return np.sqrt(np.mean(np.square(signal)))
+
+
+def zero_crossings(signal):
+    """Calculates the number of zero crossings in an audio signal.
+
+    Args:
+        signal (np.ndarray): The audio signal.
+
+    Returns:
+        int: The number of zero crossings in the audio signal.
+    """
+    return np.sum(np.diff(np.signbit(signal)))
+
+
+def zero_crossing_rate(signal):
+    """Calculates the zero crossing rate of an audio signal.
+
+    Args:
+        signal (np.ndarray): The audio signal.
+
+    Returns:
+        float: The zero crossing rate of the audio signal.
+    """
+    return zero_crossings(signal) / len(signal)
