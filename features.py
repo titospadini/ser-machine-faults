@@ -203,3 +203,23 @@ def feature_extractor(signal, features=["root_mean_square", "zero_crossing_rate"
             features_values.append(zero_crossing_rate(signal))
 
     return np.array(features_values)
+
+
+def get_features(signals, sampling_rate, features=["root_mean_square", "zero_crossing_rate"]):
+    """Extracts features from all input signals. Each row in the input shall be treated as a different signal.
+
+    Args:
+        signals (np.ndarray): The audio signals.
+
+        sampling_rate (int): The sampling rate of the audio signal.
+
+        features (list, optional): The list of features to extract. Defaults
+        to ["root_mean_square", "zero_crossing_rate"].
+
+    Returns:
+        np.ndarray: Extracted features.
+    """
+    features_lst = []
+    for signal in signals:
+        features_lst.append(feature_extractor(signal, features))
+    return np.array(features_lst)
