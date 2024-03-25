@@ -155,3 +155,16 @@ def spectrum_frequencies(signal, sampling_frequency):
         np.ndarray: The spectrum frequencies of the audio signal.
     """
     return np.fft.fftfreq(len(signal), 1 / sampling_frequency)
+
+
+def spectral_centroid(signal, sampling_frequency):
+    """Calculates the spectral centroid of an audio signal.
+
+    Args:
+        signal (np.ndarray): The audio signal.
+        sampling_frequency (int): The sampling frequency of the audio signal.
+
+    Returns:
+        float: The spectral centroid of the audio signal.
+    """
+    return np.sum(spectrum_frequencies(signal, sampling_frequency) * amplitude_spectrum(signal) / np.sum(amplitude_spectrum(signal)))
