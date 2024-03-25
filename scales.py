@@ -139,3 +139,24 @@ def hertz_to_erb(frequency, method="linear"):
         return 6.23 * frequency ** 2 + 93.39 * frequency + 28.52
     else:
         raise ValueError(f"Invalid method: {method}.")
+
+
+def erb_to_hertz(frequency, method="linear"):
+    """Converts a frequency from Equivalent Rectangular Bandwidth (ERB) to Hertz.
+
+    Args:
+        frequency (float): The frequency in ERB.
+        method (str, optional): The method to convert the frequency.
+            Valid methods are:
+                - "linear" (Default)
+                - "polynomial"
+
+    Returns:
+        float: The frequency in Hertz.
+    """
+    if method == "linear":
+        return (frequency / 24.7 - 1) / 0.00437
+    elif method == "polynomial":
+        return 1000 * ((0.312 - (np.exp((frequency - 43.0) / 11.17)) * 14.675) / (np.exp((frequency - 43.0) / 11.17) - 1.0))
+    else:
+        raise ValueError(f"Invalid method: {method}.")
