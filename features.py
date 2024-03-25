@@ -70,3 +70,15 @@ def kurtosis(signal):
         float: The kurtosis of the audio signal.
     """
     return (1 / len(signal)) * np.sum(((signal - mean(signal)) / standard_deviation(signal)) ** 4) - 3
+
+
+def root_mean_square(signal):
+    """Calculates the root mean square of an audio signal.
+
+    Args:
+        signal (np.ndarray): The audio signal.
+
+    Returns:
+        float: The root mean square of the audio signal.
+    """
+    return np.sqrt(np.mean(np.square(signal)))
