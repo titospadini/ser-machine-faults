@@ -142,3 +142,16 @@ def power_spectrum(signal):
         np.ndarray: The power spectrum of the audio signal.
     """
     return amplitude_spectrum(signal) ** 2
+
+
+def spectrum_frequencies(signal, sampling_frequency):
+    """Calculates the spectrum frequencies of an audio signal.
+
+    Args:
+        signal (np.ndarray): The audio signal.
+        sampling_frequency (int): The sampling frequency of the audio signal.
+
+    Returns:
+        np.ndarray: The spectrum frequencies of the audio signal.
+    """
+    return np.fft.fftfreq(len(signal), 1 / sampling_frequency)
