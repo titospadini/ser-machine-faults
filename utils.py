@@ -101,20 +101,20 @@ def remove_silence(signal, threshold_dbfs=-40):
     return signal[dbfs > threshold_dbfs]
 
 
-def segment_signal(signal, sampling_rate, segment_duration=200, overlap_duration=10):
+def segment_signal(signal, sampling_frequency, segment_duration=200, overlap_duration=10):
     """Segments an audio signal into segments of a given duration.
 
     Args:
         signal (np.ndarray): The audio signal.
-        sampling_rate (int): The sampling rate of the audio signal.
+        sampling_frequency (int): The sampling frequency of the audio signal.
         segment_duration (int, optional): The duration of the segments. Defaults to 200 ms.
         overlap_duration (int, optional): The duration of the overlap. Defaults to 10 ms.
 
     Returns:
         np.ndarray: An array of the audio segments.
     """
-    segment_duration_samples = int(segment_duration * sampling_rate / 1000)
-    overlap_duration_samples = int(overlap_duration * sampling_rate / 1000)
+    segment_duration_samples = int(segment_duration * sampling_frequency / 1000)
+    overlap_duration_samples = int(overlap_duration * sampling_frequency / 1000)
 
     segments = []
 
@@ -153,7 +153,7 @@ def audio_to_df(path, mixing_method="sum", normalize_dbfs=-6, new_sampling_frequ
     if silence_threshold_dbfs is not None:
         data = remove_silence(data, threshold_dbfs=silence_threshold_dbfs)
 
-    segments = segment_signal(data, sampling_rate=new_sampling_frequency, segment_duration=segment_duration, overlap_duration=overlap_duration)
+    segments = segment_signal(data, sampling_frequency=new_sampling_frequency, segment_duration=segment_duration, overlap_duration=overlap_duration)
 
     df = pd.DataFrame(segments)
 
