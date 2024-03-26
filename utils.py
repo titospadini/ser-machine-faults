@@ -1,6 +1,8 @@
 import numpy as np
 import pandas as pd
 import soundfile as sf
+import matplotlib.pyplot as plt
+from sklearn import metrics
 
 def read_audio(path):
     """Reads an audio file and returns the signal and its sampling frequency.
@@ -158,3 +160,25 @@ def audio_to_df(path, mixing_method="sum", normalize_dbfs=-6, new_sampling_frequ
     df = pd.DataFrame(segments)
 
     return df
+
+
+def plot_confusion_matrix(y_true, y_pred, labels):
+    cm = metrics.confusion_matrix(y_true, y_pred, labels=labels)
+    fig = plt.figure(figsize=(8, 8))
+    ax = fig.add_subplot(111)
+    cax = ax.matshow(cm)
+
+    for (i, j), z in np.ndenumerate(cm):
+        ax.text(j, i, str(z), ha='center', va='center', bbox=dict(boxstyle='round', facecolor='white', edgecolor='0.3'))
+
+    fig.colorbar(cax)
+
+    # Define os ticks antes de definir os rótulos
+    ax.set_xticks(np.arange(len(labels)))
+    ax.set_yticks(np.arange(len(labels)))
+
+    ax.set_xticklabels(labels)
+    ax.set_yticklabels(labels)
+    plt.xlabel('Predicted')
+    plt.ylabel('True')
+    plt.show()
