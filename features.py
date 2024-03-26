@@ -197,7 +197,19 @@ def feature_extractor(signal, features=["root_mean_square", "zero_crossing_rate"
     """
     features_values = []
     for feature in features:
-        if feature == "root_mean_square":
+        if feature == "mean":
+            features_values.append(mean(signal))
+        elif feature == "median":
+            features_values.append(median(signal))
+        elif feature == "variance":
+            features_values.append(variance(signal))
+        elif feature == "standard_deviation":
+            features_values.append(standard_deviation(signal))
+        elif feature == "skewness":
+            features_values.append(skewness(signal))
+        elif feature == "kurtosis":
+            features_values.append(kurtosis(signal))
+        elif feature == "root_mean_square":
             features_values.append(root_mean_square(signal))
         elif feature == "zero_crossing_rate":
             features_values.append(zero_crossing_rate(signal))
