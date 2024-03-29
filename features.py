@@ -108,6 +108,24 @@ def zero_crossing_rate(signal):
     return zero_crossings(signal) / len(signal)
 
 
+def signal_peaks(signal, n_peaks=1):
+    """Calculates the peaks of an audio signal.
+
+    Args:
+        signal (np.ndarray): The audio signal.
+        n_peaks (int, optional): The number of peaks. Defaults to 1.
+
+    Returns:
+        np.ndarray: The peaks of the audio signal.
+    """
+    signal = np.asarray(signal)
+
+    if n_peaks > signal.shape[0]:
+        raise ValueError("The number of peaks cannot be greater than the number of samples.")
+
+    return np.flip(signal[np.argpartition(signal, -n_peaks)[-n_peaks:]])
+
+
 def spectrum(signal):
     """Calculates the spectrum of an audio signal.
 
