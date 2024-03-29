@@ -126,6 +126,18 @@ def signal_peaks(signal, n_peaks=1):
     return np.flip(signal[np.argpartition(signal, -n_peaks)[-n_peaks:]])
 
 
+def peak_to_peak(signal):
+    """Calculates the peak-to-peak amplitude of an audio signal.
+
+    Args:
+        signal (np.ndarray): The audio signal.
+
+    Returns:
+        float: The peak-to-peak amplitude of the audio signal.
+    """
+    return np.max(signal) - np.min(signal)
+
+
 def spectrum(signal):
     """Calculates the spectrum of an audio signal.
 
