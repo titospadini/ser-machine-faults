@@ -4,3 +4,5 @@ __pycache__
 
 # files
 test.ipynb
+X.npy
+y.npy
