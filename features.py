@@ -243,6 +243,8 @@ def feature_extractor(signal, features=["root_mean_square", "zero_crossing_rate"
             features_values.append(root_mean_square(signal))
         elif feature == "zero_crossing_rate":
             features_values.append(zero_crossing_rate(signal))
+        elif feature == "peak_to_peak":
+            features_values.append(peak_to_peak(signal))
 
     return np.array(features_values)
 
