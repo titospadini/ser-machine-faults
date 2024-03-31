@@ -1,122 +1,122 @@
 import numpy as np
 
 def mean(signal):
-    """Calculates the mean of an audio signal.
+    """Calculates the mean of a signal.
 
     Args:
-        signal (np.ndarray): The audio signal.
+        signal (np.ndarray): The signal.
 
     Returns:
-        float: The mean of the audio signal.
+        float: The mean of the signal.
     """
     return np.mean(signal)
 
 
 def variance(signal):
-    """Calculates the variance of an audio signal.
+    """Calculates the variance of a signal.
 
     Args:
-        signal (np.ndarray): The audio signal.
+        signal (np.ndarray): The signal.
 
     Returns:
-        float: The variance of the audio signal.
+        float: The variance of the signal.
     """
     return np.var(signal)
 
 
 def standard_deviation(signal):
-    """Calculates the standard deviation of an audio signal.
+    """Calculates the standard deviation of a signal.
 
     Args:
-        signal (np.ndarray): The audio signal.
+        signal (np.ndarray): The signal.
 
     Returns:
-        float: The standard deviation of the audio signal.
+        float: The standard deviation of the signal.
     """
     return np.std(signal)
 
 
 def median(signal):
-    """Calculates the median of an audio signal.
+    """Calculates the median of a signal.
 
     Args:
-        signal (np.ndarray): The audio signal.
+        signal (np.ndarray): The signal.
 
     Returns:
-        float: The median of the audio signal.
+        float: The median of the signal.
     """
     return np.median(signal)
 
 
 def skewness(signal):
-    """Calculates the skewness of an audio signal.
+    """Calculates the skewness of a signal.
 
     Args:
-        signal (np.ndarray): The audio signal.
+        signal (np.ndarray): The signal.
 
     Returns:
-        float: The skewness of the audio signal.
+        float: The skewness of the signal.
     """
     return (1 / len(signal)) * np.sum(((signal - mean(signal)) / standard_deviation(signal)) ** 3)
 
 
 def kurtosis(signal):
-    """Calculates the kurtosis of an audio signal.
+    """Calculates the kurtosis of a signal.
 
     Args:
-        signal (np.ndarray): The audio signal.
+        signal (np.ndarray): The signal.
 
     Returns:
-        float: The kurtosis of the audio signal.
+        float: The kurtosis of the signal.
     """
     return (1 / len(signal)) * np.sum(((signal - mean(signal)) / standard_deviation(signal)) ** 4) - 3
 
 
 def root_mean_square(signal):
-    """Calculates the root mean square of an audio signal.
+    """Calculates the root mean square of a signal.
 
     Args:
-        signal (np.ndarray): The audio signal.
+        signal (np.ndarray): The signal.
 
     Returns:
-        float: The root mean square of the audio signal.
+        float: The root mean square of the signal.
     """
     return np.sqrt(np.mean(np.square(signal)))
 
 
 def zero_crossings(signal):
-    """Calculates the number of zero crossings in an audio signal.
+    """Calculates the number of zero crossings in a signal.
 
     Args:
-        signal (np.ndarray): The audio signal.
+        signal (np.ndarray): The signal.
 
     Returns:
-        int: The number of zero crossings in the audio signal.
+        int: The number of zero crossings in the signal.
     """
     return np.sum(np.diff(np.signbit(signal)))
 
 
 def zero_crossing_rate(signal):
-    """Calculates the zero crossing rate of an audio signal.
+    """Calculates the zero crossing rate of a signal.
 
     Args:
-        signal (np.ndarray): The audio signal.
+        signal (np.ndarray): The signal.
 
     Returns:
-        float: The zero crossing rate of the audio signal.
+        float: The zero crossing rate of the signal.
     """
     return zero_crossings(signal) / len(signal)
 
 
 def signal_peaks(signal, n_peaks=1):
-    """Calculates the peaks of an audio signal.
+    """Calculates the peaks of a signal.
 
     Args:
-        signal (np.ndarray): The audio signal.
+        signal (np.ndarray): The signal.
         n_peaks (int, optional): The number of peaks. Defaults to 1.
 
     Returns:
-        np.ndarray: The peaks of the audio signal.
+        np.ndarray: The peaks of the signal.
     """
     signal = np.asarray(signal)
 
@@ -127,97 +127,97 @@ def signal_peaks(signal, n_peaks=1):
 
 
 def peak_to_peak(signal):
-    """Calculates the peak-to-peak amplitude of an audio signal.
+    """Calculates the peak-to-peak amplitude of a signal.
 
     Args:
-        signal (np.ndarray): The audio signal.
+        signal (np.ndarray): The signal.
 
     Returns:
-        float: The peak-to-peak amplitude of the audio signal.
+        float: The peak-to-peak amplitude of the signal.
     """
     return np.max(signal) - np.min(signal)
 
 
 def spectrum(signal):
-    """Calculates the spectrum of an audio signal.
+    """Calculates the spectrum of a signal.
 
     Args:
-        signal (np.ndarray): The audio signal.
+        signal (np.ndarray): The signal.
 
     Returns:
-        np.ndarray: The spectrum of the audio signal.
+        np.ndarray: The spectrum of the signal.
     """
     return np.fft.fft(signal)
 
 
 def amplitude_spectrum(signal):
-    """Calculates the amplitude spectrum of an audio signal.
+    """Calculates the amplitude spectrum of a signal.
 
     Args:
-        signal (np.ndarray): The audio signal.
+        signal (np.ndarray): The signal.
 
     Returns:
-        np.ndarray: The amplitude spectrum of the audio signal.
+        np.ndarray: The amplitude spectrum of the signal.
     """
     return np.abs(spectrum(signal))
 
 
 def power_spectrum(signal):
-    """Calculates the power spectrum of an audio signal.
+    """Calculates the power spectrum of a signal.
 
     Args:
-        signal (np.ndarray): The audio signal.
+        signal (np.ndarray): The signal.
 
     Returns:
-        np.ndarray: The power spectrum of the audio signal.
+        np.ndarray: The power spectrum of the signal.
     """
     return amplitude_spectrum(signal) ** 2
 
 
 def spectrum_frequencies(signal, sampling_frequency):
-    """Calculates the spectrum frequencies of an audio signal.
+    """Calculates the spectrum frequencies of a signal.
 
     Args:
-        signal (np.ndarray): The audio signal.
-        sampling_frequency (int): The sampling frequency of the audio signal.
+        signal (np.ndarray): The signal.
+        sampling_frequency (int): The sampling frequency of the signal.
 
     Returns:
-        np.ndarray: The spectrum frequencies of the audio signal.
+        np.ndarray: The spectrum frequencies of the signal.
     """
     return np.fft.fftfreq(len(signal), 1 / sampling_frequency)
 
 
 def spectral_centroid(signal, sampling_frequency):
-    """Calculates the spectral centroid of an audio signal.
+    """Calculates the spectral centroid of a signal.
 
     Args:
-        signal (np.ndarray): The audio signal.
-        sampling_frequency (int): The sampling frequency of the audio signal.
+        signal (np.ndarray): The signal.
+        sampling_frequency (int): The sampling frequency of the signal.
 
     Returns:
-        float: The spectral centroid of the audio signal.
+        float: The spectral centroid of the signal.
     """
     return np.sum(spectrum_frequencies(signal, sampling_frequency) * amplitude_spectrum(signal) / np.sum(amplitude_spectrum(signal)))
 
 
 def spectral_bandwidth(signal, sampling_frequency):
-    """Calculates the spectral bandwidth of an audio signal.
+    """Calculates the spectral bandwidth of a signal.
 
     Args:
-        signal (np.ndarray): The audio signal.
-        sampling_frequency (int): The sampling frequency of the audio signal.
+        signal (np.ndarray): The signal.
+        sampling_frequency (int): The sampling frequency of the signal.
 
     Returns:
-        float: The spectral bandwidth of the audio signal.
+        float: The spectral bandwidth of the signal.
     """
     return np.sqrt(np.sum(power_spectrum(signal) * (spectrum_frequencies(signal, sampling_frequency) - spectral_centroid(signal, sampling_frequency)) ** 2) / np.sum(power_spectrum(signal)))
 
 
 def feature_extractor(signal, features=["root_mean_square", "zero_crossing_rate"]):
-    """Extracts features from an audio signal.
+    """Extracts features from a signal.
 
     Args:
-        signal (np.ndarray): The audio signal.
+        signal (np.ndarray): The signal.
 
         features (list, optional): The list of features to extract. Defaults
         to ["root_mean_square", "zero_crossing_rate"].
@@ -251,7 +251,7 @@ def get_features(signals, features=["root_mean_square", "zero_crossing_rate"]):
     """Extracts features from all input signals. Each row in the input shall be treated as a different signal.
 
     Args:
-        signals (np.ndarray): The audio signals.
+        signals (np.ndarray): The signals.
 
         features (list, optional): The list of features to extract. Defaults
         to ["root_mean_square", "zero_crossing_rate"].
