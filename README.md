@@ -3,6 +3,16 @@ Sound Event Recognition (SER) for machine faults classification.
 
 At this moment, this project is still in development.
 
+This project uses Python 3.12.2 with the libraries*:
+- numpy
+- soundfile
+- matplotlib
+- scikit-learn
+- pandas
+- jupyterlab
+
+\* check the [requirements.txt](https://github.com/titospadini/ser-machine-faults/blob/main/requirements.txt) file for more details.
+
 
 ## Small and simple dataset
 
@@ -28,12 +38,12 @@ These audio files have the following specifications:
 - Channels:             2 (Stereo)
 - Duration:             ~ 1 minute per file (~ 5 minutes and 8 seconds in total)
 
-For now, this project is using the following specifications*:
+For now, this project is using the following specifications**:
 - Sampling Frequency:   16000 Hz
 - Bit Depth:            16 bits
 - Channels:             1 (Mono)
 
-\* not mentioned specifications here are assumed to be the same as the ones in the audio files.
+\** not mentioned specifications here are assumed to be the same as the ones in the audio files.
 
 
 ### Audio preparation
