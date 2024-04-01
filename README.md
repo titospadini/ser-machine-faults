@@ -6,7 +6,7 @@ At this moment, this project is still in development.
 
 ## Small and simple dataset
 
-This part of the project is in `simple_classification.ipynb`.
+This part of the project is in [simple_classification.ipynb](https://github.com/titospadini/ser-machine-faults/blob/main/simple_classification.ipynb).
 
 For initial testing purposes, this project was using audio files from the following repository: https://github.com/RashadShubita/Fault-Detection-using-TinyML.
 
@@ -37,7 +37,7 @@ For now, this project is using the following specifications*:
 
 
 ### Audio preparation
-To achieve the desired audio specifications, the audio files were prepared using the following steps in Python with SoundFile and Numpy libraries plus some custom-made functions (see `utils.py` for more details):
+To achieve the desired audio specifications, the audio files were prepared using the following steps in Python with SoundFile and Numpy libraries plus some custom-made functions (see [utils.py](https://github.com/titospadini/ser-machine-faults/blob/main/utils.py) for more details):
 1. read the audio file;
 2. mixing down the channels from stereo to mono;
 3. normalize the signal to -6 dBFS;
@@ -47,7 +47,7 @@ To achieve the desired audio specifications, the audio files were prepared using
 
 
 ### Feature extraction
-Then, for each segment the following features were extracted (see `features.py` for more details):
+Then, for each segment the following features were extracted (see [features.py](https://github.com/titospadini/ser-machine-faults/blob/main/features.py) for more details):
 - mean
 - median
 - variance
