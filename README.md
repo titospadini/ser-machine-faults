@@ -1,8 +1,9 @@
 # SER for Machine Faults Classification
 Sound Event Recognition (SER) for machine faults classification.
 
-At this moment, this project is still in development.
+This project is under development on Ubuntu 22.04.4 LTS running via WSL on a Windows 11 Pro desktop.
 
+## Installation and usage
 This project uses Miniconda and Python 3.12.2 interpreter with the following libraries*:
 - numpy
 - soundfile
@@ -12,6 +13,21 @@ This project uses Miniconda and Python 3.12.2 interpreter with the following lib
 - jupyterlab
 
 \* check the [requirements.txt](https://github.com/titospadini/ser-machine-faults/blob/main/requirements.txt) file for more details.
+
+It is recommended to create a virtual environment with the following command:
+`conda create -n machine-faults python=3.12.2`
+
+Then, to use the virtual environment, activate it with:
+`conda activate machine-faults`
+
+To install the dependencies (if not already installed), run:
+`pip install -r requirements.txt`
+
+To use the Jupyter notebooks, run:
+`jupyter lab`
+
+When done, deactivate the environment with:
+`conda deactivate`
 
 
 ## Small and simple dataset
