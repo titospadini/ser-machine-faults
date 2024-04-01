@@ -3,7 +3,7 @@ Sound Event Recognition (SER) for machine faults classification.
 
 At this moment, this project is still in development.
 
-This project uses Python 3.12.2 with the libraries*:
+This project uses Miniconda and Python 3.12.2 interpreter with the following libraries*:
 - numpy
 - soundfile
 - matplotlib
