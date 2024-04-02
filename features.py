@@ -84,6 +84,18 @@ def energy(signal):
     return np.sum(np.square(signal))
 
 
+def power(signal):
+    """Calculates the average power of a signal.
+
+    Args:
+        signal (np.ndarray): The signal.
+
+    Returns:
+        float: The power of the signal.
+    """
+    return np.sum(np.square(signal)) / len(signal)
+
+
 def root_mean_square(signal):
     """Calculates the root mean square of a signal.
 
