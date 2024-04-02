@@ -72,6 +72,18 @@ def kurtosis(signal):
     return (1 / len(signal)) * np.sum(((signal - mean(signal)) / standard_deviation(signal)) ** 4) - 3
 
 
+def energy(signal):
+    """Calculates the energy of a signal.
+
+    Args:
+        signal (np.ndarray): The signal.
+
+    Returns:
+        float: The energy of the signal.
+    """
+    return np.sum(np.square(signal))
+
+
 def root_mean_square(signal):
     """Calculates the root mean square of a signal.
 
