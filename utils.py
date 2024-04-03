@@ -194,3 +194,27 @@ def plot_confusion_matrix(y_true, y_pred, labels, color_map="viridis", print_col
     plt.xlabel('Predicted')
     plt.ylabel('True')
     plt.show()
+
+
+def print_feature_importance(features_lst, importances_lst, order_by='values', ascending=False):
+    """Prints the feature importance.
+
+    Args:
+        features_lst (list): list of features.
+        importances_lst (list): list of importances.
+        order_by (str, optional): order by 'names' or 'values'. Defaults to 'values'.
+        ascending (bool, optional): order ascending. Defaults to False.
+    """
+    if order_by == 'names':
+        sorted_indices = sorted(range(len(features_lst)), key=lambda i: features_lst[i], reverse=not ascending)
+    elif order_by == 'values':
+        sorted_indices = sorted(range(len(features_lst)), key=lambda i: importances_lst[i], reverse=not ascending)
+    else:
+        print("Invalid order_by value. Please choose 'names' or 'values'.")
+        return
+
+    max_feature_length = max(len(feature) for feature in features_lst)
+
+    for i in sorted_indices:
+        tab_width = max_feature_length - len(features_lst[i]) + 1
+        print(f"{features_lst[i]}:{' ' * tab_width}{importances_lst[i]:.4f}")
