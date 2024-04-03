@@ -162,7 +162,17 @@ def audio_to_df(path, mixing_method="sum", normalize_dbfs=-6, new_sampling_frequ
     return df
 
 
-def plot_confusion_matrix(y_true, y_pred, labels, colorbar=False, print_numbers=True, print_boxes=False):
+def plot_confusion_matrix(y_true, y_pred, labels, print_colorbar=False, print_numbers=True, print_boxes=False):
+    """Plots a confusion matrix.
+
+    Args:
+        y_true (np.ndarray): vector of true labels.
+        y_pred (np.ndarray): vector of predicted labels.
+        labels (list): list of labels.
+        print_colorbar (bool, optional): prints the colorbar. Defaults to False.
+        print_numbers (bool, optional): prints the numbers. Defaults to True.
+        print_boxes (bool, optional): prints boxes behind the numbers. Defaults to False.
+    """
     cm = metrics.confusion_matrix(y_true, y_pred, labels=labels)
     fig = plt.figure(figsize=(8, 8))
     ax = fig.add_subplot(111)
@@ -172,7 +182,7 @@ def plot_confusion_matrix(y_true, y_pred, labels, colorbar=False, print_numbers=
         for (i, j), z in np.ndenumerate(cm):
             ax.text(j, i, str(z), ha='center', va='center', bbox=dict(boxstyle='round', facecolor='white', edgecolor='0.3') if print_boxes else None)
 
-    if colorbar:
+    if print_colorbar:
         fig.colorbar(cax)
 
     # Define os ticks antes de definir os rótulos
