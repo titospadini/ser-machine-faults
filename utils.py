@@ -130,16 +130,16 @@ def audio_to_df(path, mixing_method="sum", normalize_dbfs=-6, new_sampling_frequ
     """Processes an audio file through the pipeline of normalization, resampling, silence removal, and segmentation saves its segments as a Pandas DataFrame.
 
     Args:
-        path (_type_): _description_
-        mixing_method (str, optional): _description_. Defaults to "sum".
-        normalize_dbfs (int, optional): _description_. Defaults to -6.
-        new_sampling_frequency (int, optional): _description_. Defaults to 16000.
-        silence_threshold_dbfs (int, optional): _description_. Defaults to -48.
-        segment_duration (int, optional): _description_. Defaults to 500.
-        overlap_duration (int, optional): _description_. Defaults to 10.
+        path (str): path to the audio file.
+        mixing_method (str, optional): method to mix the stereo signals to mono. Defaults to "sum".
+        normalize_dbfs (int, optional): dBFS level to normalize the signal. Defaults to -6.
+        new_sampling_frequency (int, optional): new sampling frequency to resample the signal. Defaults to 16000.
+        silence_threshold_dbfs (int, optional): dBFS level to remove silence. Defaults to -48.
+        segment_duration (int, optional): duration of the segments. Defaults to 500.
+        overlap_duration (int, optional): overlap duration. Defaults to 10.
 
     Returns:
-        _type_: _description_
+        pd.DataFrame: The audio segments as a Pandas DataFrame.
     """
     data, sampling_frequency = read_audio(path)
 
