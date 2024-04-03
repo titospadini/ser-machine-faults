@@ -162,7 +162,7 @@ def audio_to_df(path, mixing_method="sum", normalize_dbfs=-6, new_sampling_frequ
     return df
 
 
-def plot_confusion_matrix(y_true, y_pred, labels, print_colorbar=False, print_numbers=True, print_boxes=False):
+def plot_confusion_matrix(y_true, y_pred, labels, color_map="viridis", print_colorbar=False, print_numbers=True, print_boxes=False):
     """Plots a confusion matrix.
 
     Args:
@@ -176,14 +176,14 @@ def plot_confusion_matrix(y_true, y_pred, labels, print_colorbar=False, print_nu
     cm = metrics.confusion_matrix(y_true, y_pred, labels=labels)
     fig = plt.figure(figsize=(8, 8))
     ax = fig.add_subplot(111)
-    cax = ax.matshow(cm)
+    cax = ax.matshow(cm, cmap=color_map)
 
     if print_numbers:
         for (i, j), z in np.ndenumerate(cm):
             ax.text(j, i, str(z), ha='center', va='center', bbox=dict(boxstyle='round', facecolor='white', edgecolor='0.3') if print_boxes else None)
 
     if print_colorbar:
-        fig.colorbar(cax)
+        fig.colorbar(cax, cmap=color_map)
 
     # Define os ticks antes de definir os rótulos
     ax.set_xticks(np.arange(len(labels)))
