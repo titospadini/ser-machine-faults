@@ -263,6 +263,10 @@ def feature_extractor(signal, features=["root_mean_square", "zero_crossing_rate"
             features_values.append(skewness(signal))
         elif feature == "kurtosis":
             features_values.append(kurtosis(signal))
+        elif feature == "energy":
+            features_values.append(energy(signal))
+        elif feature == "power":
+            features_values.append(power(signal))
         elif feature == "root_mean_square":
             features_values.append(root_mean_square(signal))
         elif feature == "zero_crossing_rate":
