@@ -237,14 +237,15 @@ def spectral_bandwidth(signal, sampling_frequency):
     return np.sqrt(np.sum(power_spectrum(signal) * (spectrum_frequencies(signal, sampling_frequency) - spectral_centroid(signal, sampling_frequency)) ** 2) / np.sum(power_spectrum(signal)))
 
 
-def feature_extractor(signal, features=["root_mean_square", "zero_crossing_rate"]):
+def feature_extractor(signal, features, sampling_frequency=16000):
     """Extracts features from a signal.
 
     Args:
         signal (np.ndarray): The signal.
 
-        features (list, optional): The list of features to extract. Defaults
-        to ["root_mean_square", "zero_crossing_rate"].
+        features (list): The list of features to extract.
+
+        sampling_frequency (int, optional): The sampling frequency of the signal. Defaults to 16000.
 
     Returns:
         np.ndarray: Extracted features.
@@ -273,18 +274,23 @@ def feature_extractor(signal, features=["root_mean_square", "zero_crossing_rate"
             features_values.append(zero_crossing_rate(signal))
         elif feature == "peak_to_peak":
             features_values.append(peak_to_peak(signal))
+        elif feature == "spectral_centroid":
+            features_values.append(spectral_centroid(signal, sampling_frequency))
+        elif feature == "spectral_bandwidth":
+            features_values.append(spectral_bandwidth(signal, sampling_frequency))
+        else:
+            raise ValueError(f"Invalid feature: {feature}.")
 
     return np.array(features_values)
 
 
-def get_features(signals, features=["root_mean_square", "zero_crossing_rate"]):
+def get_features(signals, features):
     """Extracts features from all input signals. Each row in the input shall be treated as a different signal.
 
     Args:
         signals (np.ndarray): The signals.
 
-        features (list, optional): The list of features to extract. Defaults
-        to ["root_mean_square", "zero_crossing_rate"].
+        features (list): The list of features to extract.
 
     Returns:
         np.ndarray: Extracted features.
