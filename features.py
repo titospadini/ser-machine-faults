@@ -242,6 +242,8 @@ def feature_extractor(signal, features, frame_length=2048, hop_length=512, cente
             feature_lst.append(power(signal, frame_length=frame_length, hop_length=hop_length, center=center, pad_mode=pad_mode).flatten())
         elif feature == "root_mean_square":
             feature_lst.append(rms(y=signal, frame_length=frame_length, hop_length=hop_length, center=center, pad_mode=pad_mode).flatten())
+        elif feature == "zero_crossing_rate":
+            feature_lst.append(zero_crossing_rate(y=signal, frame_length=frame_length, hop_length=hop_length, center=center).flatten())
         else:
             raise ValueError(f"Invalid feature: {feature}.")
 
