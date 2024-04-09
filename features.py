@@ -1,301 +1,136 @@
 import numpy as np
 
-def mean(signal):
-    """Calculates the mean of a signal.
+from librosa.util import frame
+
+def mean(signal, frame_length=2048, hop_length=512, center=True, pad_mode="constant"):
+    """ Compute the mean along the last axis.
 
     Args:
         signal (np.ndarray): The signal.
+        frame_length (int, optional): The frame length. Defaults to 2048.
+        hop_length (int, optional): The hop length. Defaults to 512.
+        center (bool, optional): Pad the signal by half the frame length. Defaults to True.
+        pad_mode (str, optional): The padding mode. Defaults to "constant".
 
     Returns:
-        float: The mean of the signal.
-    """
-    return np.mean(signal)
-
-
-def variance(signal):
-    """Calculates the variance of a signal.
-
-    Args:
-        signal (np.ndarray): The signal.
-
-    Returns:
-        float: The variance of the signal.
-    """
-    return np.var(signal)
-
-
-def standard_deviation(signal):
-    """Calculates the standard deviation of a signal.
-
-    Args:
-        signal (np.ndarray): The signal.
-
-    Returns:
-        float: The standard deviation of the signal.
-    """
-    return np.std(signal)
-
-
-def median(signal):
-    """Calculates the median of a signal.
-
-    Args:
-        signal (np.ndarray): The signal.
-
-    Returns:
-        float: The median of the signal.
-    """
-    return np.median(signal)
-
-
-def skewness(signal):
-    """Calculates the skewness of a signal.
-
-    Args:
-        signal (np.ndarray): The signal.
-
-    Returns:
-        float: The skewness of the signal.
-    """
-    return (1 / len(signal)) * np.sum(((signal - mean(signal)) / standard_deviation(signal)) ** 3)
-
-
-def kurtosis(signal):
-    """Calculates the kurtosis of a signal.
-
-    Args:
-        signal (np.ndarray): The signal.
-
-    Returns:
-        float: The kurtosis of the signal.
-    """
-    return (1 / len(signal)) * np.sum(((signal - mean(signal)) / standard_deviation(signal)) ** 4) - 3
-
-
-def energy(signal):
-    """Calculates the energy of a signal.
-
-    Args:
-        signal (np.ndarray): The signal.
-
-    Returns:
-        float: The energy of the signal.
-    """
-    return np.sum(np.square(signal))
-
-
-def power(signal):
-    """Calculates the average power of a signal.
-
-    Args:
-        signal (np.ndarray): The signal.
-
-    Returns:
-        float: The power of the signal.
-    """
-    return np.sum(np.square(signal)) / len(signal)
-
-
-def root_mean_square(signal):
-    """Calculates the root mean square of a signal.
-
-    Args:
-        signal (np.ndarray): The signal.
-
-    Returns:
-        float: The root mean square of the signal.
-    """
-    return np.sqrt(np.mean(np.square(signal)))
-
-
-def zero_crossings(signal):
-    """Calculates the number of zero crossings in a signal.
-
-    Args:
-        signal (np.ndarray): The signal.
-
-    Returns:
-        int: The number of zero crossings in the signal.
-    """
-    return np.sum(np.diff(np.signbit(signal)))
-
-
-def zero_crossing_rate(signal):
-    """Calculates the zero crossing rate of a signal.
-
-    Args:
-        signal (np.ndarray): The signal.
-
-    Returns:
-        float: The zero crossing rate of the signal.
-    """
-    return zero_crossings(signal) / len(signal)
-
-
-def signal_peaks(signal, n_peaks=1):
-    """Calculates the peaks of a signal.
-
-    Args:
-        signal (np.ndarray): The signal.
-        n_peaks (int, optional): The number of peaks. Defaults to 1.
-
-    Returns:
-        np.ndarray: The peaks of the signal.
+        np.ndarray: The mean along the last axis.
     """
     signal = np.asarray(signal)
 
-    if n_peaks > signal.shape[0]:
-        raise ValueError("The number of peaks cannot be greater than the number of samples.")
+    if center:
+        padding = [(0, 0) for _ in range(signal.ndim)]
+        padding[-1] = (int(frame_length // 2), int(frame_length // 2))
+        signal = np.pad(signal, padding, mode=pad_mode)
 
-    return np.flip(signal[np.argpartition(signal, -n_peaks)[-n_peaks:]])
+    framed_signal = frame(signal, frame_length=frame_length, hop_length=hop_length)
+
+    return np.mean(framed_signal, axis=-2, keepdims=True)
 
 
-def peak_to_peak(signal):
-    """Calculates the peak-to-peak amplitude of a signal.
+def median(signal, frame_length=2048, hop_length=512, center=True, pad_mode="constant"):
+    """ Compute the median along the last axis.
 
     Args:
         signal (np.ndarray): The signal.
+        frame_length (int, optional): The frame length. Defaults to 2048.
+        hop_length (int, optional): The hop length. Defaults to 512.
+        center (bool, optional): Pad the signal by half the frame length. Defaults to True.
+        pad_mode (str, optional): The padding mode. Defaults to "constant".
 
     Returns:
-        float: The peak-to-peak amplitude of the signal.
+        np.ndarray: The median along the last axis.
     """
-    return np.max(signal) - np.min(signal)
+    signal = np.asarray(signal)
+
+    if center:
+        padding = [(0, 0) for _ in range(signal.ndim)]
+        padding[-1] = (int(frame_length // 2), int(frame_length // 2))
+        signal = np.pad(signal, padding, mode=pad_mode)
+
+    framed_signal = frame(signal, frame_length=frame_length, hop_length=hop_length)
+
+    return np.median(framed_signal, axis=-2, keepdims=True)
 
 
-def spectrum(signal):
-    """Calculates the spectrum of a signal.
+def variance(signal, frame_length=2048, hop_length=512, center=True, pad_mode="constant"):
+    """ Compute the variance along the last axis.
 
     Args:
         signal (np.ndarray): The signal.
+        frame_length (int, optional): The frame length. Defaults to 2048.
+        hop_length (int, optional): The hop length. Defaults to 512.
+        center (bool, optional): Pad the signal by half the frame length. Defaults to True.
+        pad_mode (str, optional): The padding mode. Defaults to "constant".
 
     Returns:
-        np.ndarray: The spectrum of the signal.
+        np.ndarray: The variance along the last axis.
     """
-    return np.fft.fft(signal)
+    signal = np.asarray(signal)
+
+    if center:
+        padding = [(0, 0) for _ in range(signal.ndim)]
+        padding[-1] = (int(frame_length // 2), int(frame_length // 2))
+        signal = np.pad(signal, padding, mode=pad_mode)
+
+    framed_signal = frame(signal, frame_length=frame_length, hop_length=hop_length)
+
+    return np.var(framed_signal, axis=-2, keepdims=True)
 
 
-def amplitude_spectrum(signal):
-    """Calculates the amplitude spectrum of a signal.
+def standard_deviation(signal, frame_length=2048, hop_length=512, center=True, pad_mode="constant"):
+    """ Compute the standard deviation along the last axis.
 
     Args:
         signal (np.ndarray): The signal.
+        frame_length (int, optional): The frame length. Defaults to 2048.
+        hop_length (int, optional): The hop length. Defaults to 512.
+        center (bool, optional): Pad the signal by half the frame length. Defaults to True.
+        pad_mode (str, optional): The padding mode. Defaults to "constant".
 
     Returns:
-        np.ndarray: The amplitude spectrum of the signal.
+        np.ndarray: The standard deviation along the last axis.
     """
-    return np.abs(spectrum(signal))
+    signal = np.asarray(signal)
+
+    if center:
+        padding = [(0, 0) for _ in range(signal.ndim)]
+        padding[-1] = (int(frame_length // 2), int(frame_length // 2))
+        signal = np.pad(signal, padding, mode=pad_mode)
+
+    framed_signal = frame(signal, frame_length=frame_length, hop_length=hop_length)
+
+    return np.std(framed_signal, axis=-2, keepdims=True)
 
 
-def power_spectrum(signal):
-    """Calculates the power spectrum of a signal.
+def feature_extractor(signal, features, frame_length=2048, hop_length=512, center=True, pad_mode="constant"):
+    """ Extract features from a signal.
 
     Args:
         signal (np.ndarray): The signal.
-
-    Returns:
-        np.ndarray: The power spectrum of the signal.
-    """
-    return amplitude_spectrum(signal) ** 2
-
-
-def spectrum_frequencies(signal, sampling_frequency):
-    """Calculates the spectrum frequencies of a signal.
-
-    Args:
-        signal (np.ndarray): The signal.
-        sampling_frequency (int): The sampling frequency of the signal.
-
-    Returns:
-        np.ndarray: The spectrum frequencies of the signal.
-    """
-    return np.fft.fftfreq(len(signal), 1 / sampling_frequency)
-
-
-def spectral_centroid(signal, sampling_frequency):
-    """Calculates the spectral centroid of a signal.
-
-    Args:
-        signal (np.ndarray): The signal.
-        sampling_frequency (int): The sampling frequency of the signal.
-
-    Returns:
-        float: The spectral centroid of the signal.
-    """
-    return np.sum(spectrum_frequencies(signal, sampling_frequency) * amplitude_spectrum(signal) / np.sum(amplitude_spectrum(signal)))
-
-
-def spectral_bandwidth(signal, sampling_frequency):
-    """Calculates the spectral bandwidth of a signal.
-
-    Args:
-        signal (np.ndarray): The signal.
-        sampling_frequency (int): The sampling frequency of the signal.
-
-    Returns:
-        float: The spectral bandwidth of the signal.
-    """
-    return np.sqrt(np.sum(power_spectrum(signal) * (spectrum_frequencies(signal, sampling_frequency) - spectral_centroid(signal, sampling_frequency)) ** 2) / np.sum(power_spectrum(signal)))
-
-
-def feature_extractor(signal, features, sampling_frequency=16000):
-    """Extracts features from a signal.
-
-    Args:
-        signal (np.ndarray): The signal.
-
         features (list): The list of features to extract.
+        frame_length (int, optional): The frame length. Defaults to 2048.
+        hop_length (int, optional): The hop length. Defaults to 512.
+        center (bool, optional): Pad the signal by half the frame length. Defaults to True.
+        pad_mode (str, optional): The padding mode. Defaults to "constant".
 
-        sampling_frequency (int, optional): The sampling frequency of the signal. Defaults to 16000.
+    Raises:
+        ValueError: Invalid feature.
 
     Returns:
-        np.ndarray: Extracted features.
+        np.ndarray: The extracted features.
     """
-    features_values = []
+    feature_lst = []
+
     for feature in features:
         if feature == "mean":
-            features_values.append(mean(signal))
+            feature_lst.append(mean(signal, frame_length=frame_length, hop_length=hop_length, center=True).flatten())
         elif feature == "median":
-            features_values.append(median(signal))
+            feature_lst.append(median(signal, frame_length=frame_length, hop_length=hop_length, center=True).flatten())
         elif feature == "variance":
-            features_values.append(variance(signal))
+            feature_lst.append(variance(signal, frame_length=frame_length, hop_length=hop_length, center=True).flatten())
         elif feature == "standard_deviation":
-            features_values.append(standard_deviation(signal))
-        elif feature == "skewness":
-            features_values.append(skewness(signal))
-        elif feature == "kurtosis":
-            features_values.append(kurtosis(signal))
-        elif feature == "energy":
-            features_values.append(energy(signal))
-        elif feature == "power":
-            features_values.append(power(signal))
-        elif feature == "root_mean_square":
-            features_values.append(root_mean_square(signal))
-        elif feature == "zero_crossing_rate":
-            features_values.append(zero_crossing_rate(signal))
-        elif feature == "peak_to_peak":
-            features_values.append(peak_to_peak(signal))
-        elif feature == "spectral_centroid":
-            features_values.append(spectral_centroid(signal, sampling_frequency))
-        elif feature == "spectral_bandwidth":
-            features_values.append(spectral_bandwidth(signal, sampling_frequency))
+            feature_lst.append(standard_deviation(signal, frame_length=frame_length, hop_length=hop_length, center=True).flatten())
         else:
             raise ValueError(f"Invalid feature: {feature}.")
 
-    return np.array(features_values)
-
-
-def get_features(signals, features):
-    """Extracts features from all input signals. Each row in the input shall be treated as a different signal.
-
-    Args:
-        signals (np.ndarray): The signals.
-
-        features (list): The list of features to extract.
-
-    Returns:
-        np.ndarray: Extracted features.
-    """
-    features_lst = []
-    for signal in signals:
-        features_lst.append(feature_extractor(signal, features))
-    return np.array(features_lst)
+    return np.array(feature_lst)
