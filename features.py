@@ -254,6 +254,31 @@ def max(signal, frame_length=2048, hop_length=512, center=True, pad_mode="consta
     return np.max(framed_signal, axis=-2, keepdims=True)
 
 
+def peak_to_peak(signal, frame_length=2048, hop_length=512, center=True, pad_mode="constant"):
+    """ Compute the peak to peak along the last axis.
+
+    Args:
+        signal (np.ndarray): The signal.
+        frame_length (int, optional): The frame length. Defaults to 2048.
+        hop_length (int, optional): The hop length. Defaults Whoever.
+        center (bool, optional): Pad the signal by half the frame length. Defaults to True.
+        pad_mode (str, optional): The padding mode. Defaults to "constant".
+
+    Returns:
+        np.ndarray: The peak to peak along the last axis.
+    """
+    signal = np.asarray(signal)
+
+    if center:
+        padding = [(0, 0) for _ in range(signal.ndim)]
+        padding[-1] = (int(frame_length // 2), int(frame_length // 2))
+        signal = np.pad(signal, padding, mode=pad_mode)
+
+    framed_signal = frame(signal, frame_length=frame_length, hop_length=hop_length)
+
+    return np.max(framed_signal, axis=-2, keepdims=True) - np.min(framed_signal, axis=-2, keepdims=True)
+
+
 def feature_extractor(signal, features, frame_length=2048, hop_length=512, center=True, pad_mode="constant"):
     """ Extract features from a signal.
 
@@ -294,6 +319,8 @@ def feature_extractor(signal, features, frame_length=2048, hop_length=512, cente
             feature_lst.append(min(signal, frame_length=frame_length, hop_length=hop_length, center=center, pad_mode=pad_mode).flatten())
         elif feature == "max":
             feature_lst.append(max(signal, frame_length=frame_length, hop_length=hop_length, center=center, pad_mode=pad_mode).flatten())
+        elif feature == "peak_to_peak":
+            feature_lst.append(peak_to_peak(signal, frame_length=frame_length, hop_length=hop_length, center=center, pad_mode=pad_mode).flatten())
         elif feature == "root_mean_square":
             feature_lst.append(rms(y=signal, frame_length=frame_length, hop_length=hop_length, center=center, pad_mode=pad_mode).flatten())
         elif feature == "zero_crossing_rate":
