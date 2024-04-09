@@ -279,7 +279,7 @@ def peak_to_peak(signal, frame_length=2048, hop_length=512, center=True, pad_mod
     return np.max(framed_signal, axis=-2, keepdims=True) - np.min(framed_signal, axis=-2, keepdims=True)
 
 
-def feature_extractor(signal, features, frame_length=2048, hop_length=512, center=True, pad_mode="constant"):
+def feature_extractor(signal, features, sampling_frequency=16000, frame_length=2048, hop_length=512, center=True, pad_mode="constant"):
     """ Extract features from a signal.
 
     Args:
@@ -325,6 +325,8 @@ def feature_extractor(signal, features, frame_length=2048, hop_length=512, cente
             feature_lst.append(rms(y=signal, frame_length=frame_length, hop_length=hop_length, center=center, pad_mode=pad_mode).flatten())
         elif feature == "zero_crossing_rate":
             feature_lst.append(zero_crossing_rate(y=signal, frame_length=frame_length, hop_length=hop_length, center=center).flatten())
+        elif feature == "spectral_centroid":
+            feature_lst.append(spectral_centroid(y=signal, sr=sampling_frequency, n_fft=frame_length, hop_length=hop_length, center=center, pad_mode=pad_mode).flatten())
         else:
             raise ValueError(f"Invalid feature: {feature}.")
 
