@@ -204,6 +204,56 @@ def power(signal, frame_length=2048, hop_length=512, center=True, pad_mode="cons
     return np.sum(framed_signal**2, axis=-2, keepdims=True) / framed_signal.shape[-2]
 
 
+def min(signal, frame_length=2048, hop_length=512, center=True, pad_mode="constant"):
+    """ Compute the min along the last axis.
+
+    Args:
+        signal (np.ndarray): The signal.
+        frame_length (int, optional): The frame length. Defaults to 2048.
+        hop_length (int, optional): The hop length. Defaults to 512.
+        center (bool, optional): Pad the signal by half the frame length. Defaults to True.
+        pad_mode (str, optional): The padding mode. Defaults to "constant".
+
+    Returns:
+        np.ndarray: The min along the last axis.
+    """
+    signal = np.asarray(signal)
+
+    if center:
+        padding = [(0, 0) for _ in range(signal.ndim)]
+        padding[-1] = (int(frame_length // 2), int(frame_length // 2))
+        signal = np.pad(signal, padding, mode=pad_mode)
+
+    framed_signal = frame(signal, frame_length=frame_length, hop_length=hop_length)
+
+    return np.min(framed_signal, axis=-2, keepdims=True)
+
+
+def max(signal, frame_length=2048, hop_length=512, center=True, pad_mode="constant"):
+    """ Compute the max along the last axis.
+
+    Args:
+        signal (np.ndarray): The signal.
+        frame_length (int, optional): The frame length. Defaults to 2048.
+        hop_length (int, optional): The hop length. Defaults to 512.
+        center (bool, optional): Pad the signal by half the frame length. Defaults to True.
+        pad_mode (str, optional): The padding mode. Defaults to "constant".
+
+    Returns:
+        np.ndarray: The max along the last axis.
+    """
+    signal = np.asarray(signal)
+
+    if center:
+        padding = [(0, 0) for _ in range(signal.ndim)]
+        padding[-1] = (int(frame_length // 2), int(frame_length // 2))
+        signal = np.pad(signal, padding, mode=pad_mode)
+
+    framed_signal = frame(signal, frame_length=frame_length, hop_length=hop_length)
+
+    return np.max(framed_signal, axis=-2, keepdims=True)
+
+
 def feature_extractor(signal, features, frame_length=2048, hop_length=512, center=True, pad_mode="constant"):
     """ Extract features from a signal.
 
@@ -240,6 +290,10 @@ def feature_extractor(signal, features, frame_length=2048, hop_length=512, cente
             feature_lst.append(energy(signal, frame_length=frame_length, hop_length=hop_length, center=center, pad_mode=pad_mode).flatten())
         elif feature == "power":
             feature_lst.append(power(signal, frame_length=frame_length, hop_length=hop_length, center=center, pad_mode=pad_mode).flatten())
+        elif feature == "min":
+            feature_lst.append(min(signal, frame_length=frame_length, hop_length=hop_length, center=center, pad_mode=pad_mode).flatten())
+        elif feature == "max":
+            feature_lst.append(max(signal, frame_length=frame_length, hop_length=hop_length, center=center, pad_mode=pad_mode).flatten())
         elif feature == "root_mean_square":
             feature_lst.append(rms(y=signal, frame_length=frame_length, hop_length=hop_length, center=center, pad_mode=pad_mode).flatten())
         elif feature == "zero_crossing_rate":
