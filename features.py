@@ -1,5 +1,6 @@
 import numpy as np
 
+from scipy import stats
 from librosa.util import frame
 
 def mean(signal, frame_length=2048, hop_length=512, center=True, pad_mode="constant"):
@@ -102,6 +103,56 @@ def standard_deviation(signal, frame_length=2048, hop_length=512, center=True, p
     return np.std(framed_signal, axis=-2, keepdims=True)
 
 
+def skewness(signal, frame_length=2048, hop_length=512, center=True, pad_mode="constant"):
+    """ Compute the skewness along the last axis.
+
+    Args:
+        signal (np.ndarray): The signal.
+        frame_length (int, optional): The frame length. Defaults to 2048.
+        hop_length (int, optional): The hop length. Defaults to 512.
+        center (bool, optional): Pad the signal by half the frame length. Defaults to True.
+        pad_mode (str, optional): The padding mode. Defaults to "constant".
+
+    Returns:
+        np.ndarray: The skewness along the last axis.
+    """
+    signal = np.asarray(signal)
+
+    if center:
+        padding = [(0, 0) for _ in range(signal.ndim)]
+        padding[-1] = (int(frame_length // 2), int(frame_length // 2))
+        signal = np.pad(signal, padding, mode=pad_mode)
+
+    framed_signal = frame(signal, frame_length=frame_length, hop_length=hop_length)
+
+    return stats.skew(framed_signal, axis=-2, keepdims=True)
+
+
+def kurtosis(signal, frame_length=2048, hop_length=512, center=True, pad_mode="constant"):
+    """ Compute the kurtosis along the last axis.
+
+    Args:
+        signal (np.ndarray): The signal.
+        frame_length (int, optional): The frame length. Defaults to 2048.
+        hop_length (int, optional): The hop length. Defaults to 512.
+        center (bool, optional): Pad the signal by half the frame length. Defaults to True.
+        pad_mode (str, optional): The padding mode. Defaults to "constant".
+
+    Returns:
+        np.ndarray: The kurtosis along the last axis.
+    """
+    signal = np.asarray(signal)
+
+    if center:
+        padding = [(0, 0) for _ in range(signal.ndim)]
+        padding[-1] = (int(frame_length // 2), int(frame_length // 2))
+        signal = np.pad(signal, padding, mode=pad_mode)
+
+    framed_signal = frame(signal, frame_length=frame_length, hop_length=hop_length)
+
+    return stats.kurtosis(framed_signal, axis=-2, keepdims=True)
+
+
 def feature_extractor(signal, features, frame_length=2048, hop_length=512, center=True, pad_mode="constant"):
     """ Extract features from a signal.
 
@@ -130,6 +181,10 @@ def feature_extractor(signal, features, frame_length=2048, hop_length=512, cente
             feature_lst.append(variance(signal, frame_length=frame_length, hop_length=hop_length, center=True).flatten())
         elif feature == "standard_deviation":
             feature_lst.append(standard_deviation(signal, frame_length=frame_length, hop_length=hop_length, center=True).flatten())
+        elif feature == "skewness":
+            feature_lst.append(skewness(signal, frame_length=frame_length, hop_length=hop_length, center=True).flatten())
+        elif feature == "kurtosis":
+            feature_lst.append(kurtosis(signal, frame_length=frame_length, hop_length=hop_length, center=True).flatten())
         else:
             raise ValueError(f"Invalid feature: {feature}.")
 
