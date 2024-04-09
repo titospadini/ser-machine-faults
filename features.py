@@ -2,6 +2,7 @@ import numpy as np
 
 from scipy import stats
 from librosa.util import frame
+from librosa.feature import *
 
 def mean(signal, frame_length=2048, hop_length=512, center=True, pad_mode="constant"):
     """ Compute the mean along the last axis.
@@ -239,6 +240,8 @@ def feature_extractor(signal, features, frame_length=2048, hop_length=512, cente
             feature_lst.append(energy(signal, frame_length=frame_length, hop_length=hop_length, center=center, pad_mode=pad_mode).flatten())
         elif feature == "power":
             feature_lst.append(power(signal, frame_length=frame_length, hop_length=hop_length, center=center, pad_mode=pad_mode).flatten())
+        elif feature == "root_mean_square":
+            feature_lst.append(rms(y=signal, frame_length=frame_length, hop_length=hop_length, center=center, pad_mode=pad_mode).flatten())
         else:
             raise ValueError(f"Invalid feature: {feature}.")
 
