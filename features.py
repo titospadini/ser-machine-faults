@@ -224,21 +224,21 @@ def feature_extractor(signal, features, frame_length=2048, hop_length=512, cente
 
     for feature in features:
         if feature == "mean":
-            feature_lst.append(mean(signal, frame_length=frame_length, hop_length=hop_length, center=True).flatten())
+            feature_lst.append(mean(signal, frame_length=frame_length, hop_length=hop_length, center=center, pad_mode=pad_mode).flatten())
         elif feature == "median":
-            feature_lst.append(median(signal, frame_length=frame_length, hop_length=hop_length, center=True).flatten())
+            feature_lst.append(median(signal, frame_length=frame_length, hop_length=hop_length, center=center, pad_mode=pad_mode).flatten())
         elif feature == "variance":
-            feature_lst.append(variance(signal, frame_length=frame_length, hop_length=hop_length, center=True).flatten())
+            feature_lst.append(variance(signal, frame_length=frame_length, hop_length=hop_length, center=center, pad_mode=pad_mode).flatten())
         elif feature == "standard_deviation":
-            feature_lst.append(standard_deviation(signal, frame_length=frame_length, hop_length=hop_length, center=True).flatten())
+            feature_lst.append(standard_deviation(signal, frame_length=frame_length, hop_length=hop_length, center=center, pad_mode=pad_mode).flatten())
         elif feature == "skewness":
-            feature_lst.append(skewness(signal, frame_length=frame_length, hop_length=hop_length, center=True).flatten())
+            feature_lst.append(skewness(signal, frame_length=frame_length, hop_length=hop_length, center=center, pad_mode=pad_mode).flatten())
         elif feature == "kurtosis":
-            feature_lst.append(kurtosis(signal, frame_length=frame_length, hop_length=hop_length, center=True).flatten())
+            feature_lst.append(kurtosis(signal, frame_length=frame_length, hop_length=hop_length, center=center, pad_mode=pad_mode).flatten())
         elif feature == "energy":
-            feature_lst.append(energy(signal, frame_length=frame_length, hop_length=hop_length, center=True).flatten())
+            feature_lst.append(energy(signal, frame_length=frame_length, hop_length=hop_length, center=center, pad_mode=pad_mode).flatten())
         elif feature == "power":
-            feature_lst.append(power(signal, frame_length=frame_length, hop_length=hop_length, center=True).flatten())
+            feature_lst.append(power(signal, frame_length=frame_length, hop_length=hop_length, center=center, pad_mode=pad_mode).flatten())
         else:
             raise ValueError(f"Invalid feature: {feature}.")
 
