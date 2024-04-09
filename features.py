@@ -327,6 +327,8 @@ def feature_extractor(signal, features, sampling_frequency=16000, frame_length=2
             feature_lst.append(zero_crossing_rate(y=signal, frame_length=frame_length, hop_length=hop_length, center=center).flatten())
         elif feature == "spectral_centroid":
             feature_lst.append(spectral_centroid(y=signal, sr=sampling_frequency, n_fft=frame_length, hop_length=hop_length, center=center, pad_mode=pad_mode).flatten())
+        elif feature == "spectral_bandwidth":
+            feature_lst.append(spectral_bandwidth(y=signal, sr=sampling_frequency, n_fft=frame_length, hop_length=hop_length, center=center, pad_mode=pad_mode).flatten())
         else:
             raise ValueError(f"Invalid feature: {feature}.")
 
