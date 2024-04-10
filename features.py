@@ -331,6 +331,8 @@ def feature_extractor(signal, features, sampling_frequency=16000, frame_length=2
             feature_lst.append(spectral_bandwidth(y=signal, sr=sampling_frequency, n_fft=frame_length, hop_length=hop_length, center=center, pad_mode=pad_mode).flatten())
         elif feature == "spectral_rolloff":
             feature_lst.append(spectral_rolloff(y=signal, sr=sampling_frequency, n_fft=frame_length, hop_length=hop_length, center=center, pad_mode=pad_mode).flatten())
+        elif feature == "spectral_flatness":
+            feature_lst.append(spectral_flatness(y=signal, n_fft=frame_length, hop_length=hop_length, center=center, pad_mode=pad_mode).flatten())
         else:
             raise ValueError(f"Invalid feature: {feature}.")
 
