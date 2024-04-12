@@ -1,8 +1,6 @@
 import numpy as np
-
 from scipy import stats
-from librosa.util import frame
-from librosa.feature import *
+import librosa
 
 def mean(signal, frame_length=2048, hop_length=512, center=True, pad_mode="constant"):
     """ Compute the mean along the last axis.
@@ -24,7 +22,7 @@ def mean(signal, frame_length=2048, hop_length=512, center=True, pad_mode="const
         padding[-1] = (int(frame_length // 2), int(frame_length // 2))
         signal = np.pad(signal, padding, mode=pad_mode)
 
-    framed_signal = frame(signal, frame_length=frame_length, hop_length=hop_length)
+    framed_signal = librosa.util.frame(signal, frame_length=frame_length, hop_length=hop_length)
 
     return np.mean(framed_signal, axis=-2, keepdims=True)
 
@@ -49,7 +47,7 @@ def median(signal, frame_length=2048, hop_length=512, center=True, pad_mode="con
         padding[-1] = (int(frame_length // 2), int(frame_length // 2))
         signal = np.pad(signal, padding, mode=pad_mode)
 
-    framed_signal = frame(signal, frame_length=frame_length, hop_length=hop_length)
+    framed_signal = librosa.util.frame(signal, frame_length=frame_length, hop_length=hop_length)
 
     return np.median(framed_signal, axis=-2, keepdims=True)
 
@@ -74,7 +72,7 @@ def variance(signal, frame_length=2048, hop_length=512, center=True, pad_mode="c
         padding[-1] = (int(frame_length // 2), int(frame_length // 2))
         signal = np.pad(signal, padding, mode=pad_mode)
 
-    framed_signal = frame(signal, frame_length=frame_length, hop_length=hop_length)
+    framed_signal = librosa.util.frame(signal, frame_length=frame_length, hop_length=hop_length)
 
     return np.var(framed_signal, axis=-2, keepdims=True)
 
@@ -99,7 +97,7 @@ def standard_deviation(signal, frame_length=2048, hop_length=512, center=True, p
         padding[-1] = (int(frame_length // 2), int(frame_length // 2))
         signal = np.pad(signal, padding, mode=pad_mode)
 
-    framed_signal = frame(signal, frame_length=frame_length, hop_length=hop_length)
+    framed_signal = librosa.util.frame(signal, frame_length=frame_length, hop_length=hop_length)
 
     return np.std(framed_signal, axis=-2, keepdims=True)
 
@@ -124,7 +122,7 @@ def skewness(signal, frame_length=2048, hop_length=512, center=True, pad_mode="c
         padding[-1] = (int(frame_length // 2), int(frame_length // 2))
         signal = np.pad(signal, padding, mode=pad_mode)
 
-    framed_signal = frame(signal, frame_length=frame_length, hop_length=hop_length)
+    framed_signal = librosa.util.frame(signal, frame_length=frame_length, hop_length=hop_length)
 
     return stats.skew(framed_signal, axis=-2, keepdims=True)
 
@@ -149,7 +147,7 @@ def kurtosis(signal, frame_length=2048, hop_length=512, center=True, pad_mode="c
         padding[-1] = (int(frame_length // 2), int(frame_length // 2))
         signal = np.pad(signal, padding, mode=pad_mode)
 
-    framed_signal = frame(signal, frame_length=frame_length, hop_length=hop_length)
+    framed_signal = librosa.util.frame(signal, frame_length=frame_length, hop_length=hop_length)
 
     return stats.kurtosis(framed_signal, axis=-2, keepdims=True)
 
@@ -174,7 +172,7 @@ def energy(signal, frame_length=2048, hop_length=512, center=True, pad_mode="con
         padding[-1] = (int(frame_length // 2), int(frame_length // 2))
         signal = np.pad(signal, padding, mode=pad_mode)
 
-    framed_signal = frame(signal, frame_length=frame_length, hop_length=hop_length)
+    framed_signal = librosa.util.frame(signal, frame_length=frame_length, hop_length=hop_length)
 
     return np.sum(framed_signal**2, axis=-2, keepdims=True)
 
@@ -199,7 +197,7 @@ def power(signal, frame_length=2048, hop_length=512, center=True, pad_mode="cons
         padding[-1] = (int(frame_length // 2), int(frame_length // 2))
         signal = np.pad(signal, padding, mode=pad_mode)
 
-    framed_signal = frame(signal, frame_length=frame_length, hop_length=hop_length)
+    framed_signal = librosa.util.frame(signal, frame_length=frame_length, hop_length=hop_length)
 
     return np.sum(framed_signal**2, axis=-2, keepdims=True) / framed_signal.shape[-2]
 
@@ -224,7 +222,7 @@ def min(signal, frame_length=2048, hop_length=512, center=True, pad_mode="consta
         padding[-1] = (int(frame_length // 2), int(frame_length // 2))
         signal = np.pad(signal, padding, mode=pad_mode)
 
-    framed_signal = frame(signal, frame_length=frame_length, hop_length=hop_length)
+    framed_signal = librosa.util.frame(signal, frame_length=frame_length, hop_length=hop_length)
 
     return np.min(framed_signal, axis=-2, keepdims=True)
 
@@ -249,7 +247,7 @@ def max(signal, frame_length=2048, hop_length=512, center=True, pad_mode="consta
         padding[-1] = (int(frame_length // 2), int(frame_length // 2))
         signal = np.pad(signal, padding, mode=pad_mode)
 
-    framed_signal = frame(signal, frame_length=frame_length, hop_length=hop_length)
+    framed_signal = librosa.util.frame(signal, frame_length=frame_length, hop_length=hop_length)
 
     return np.max(framed_signal, axis=-2, keepdims=True)
 
@@ -274,7 +272,7 @@ def peak_to_peak(signal, frame_length=2048, hop_length=512, center=True, pad_mod
         padding[-1] = (int(frame_length // 2), int(frame_length // 2))
         signal = np.pad(signal, padding, mode=pad_mode)
 
-    framed_signal = frame(signal, frame_length=frame_length, hop_length=hop_length)
+    framed_signal = librosa.util.frame(signal, frame_length=frame_length, hop_length=hop_length)
 
     return np.max(framed_signal, axis=-2, keepdims=True) - np.min(framed_signal, axis=-2, keepdims=True)
 
@@ -282,7 +280,7 @@ def peak_to_peak(signal, frame_length=2048, hop_length=512, center=True, pad_mod
 def root_mean_square(signal, frame_length=2048, hop_length=512, center=True, pad_mode="constant"):
     """ Compute the root mean square along the last axis.
 
-    This is simply a wrapper of rmse.
+    This is simply a wrapper of librosa.feature.rmse.
 
     Args:
         signal (np.ndarray): The signal.
@@ -294,13 +292,13 @@ def root_mean_square(signal, frame_length=2048, hop_length=512, center=True, pad
     Returns:
         np.ndarray: The root mean square along the last axis.
     """
-    return rms(y=signal, frame_length=frame_length, hop_length=hop_length, center=center, pad_mode=pad_mode)
+    return librosa.feature.rms(y=signal, frame_length=frame_length, hop_length=hop_length, center=center, pad_mode=pad_mode)
 
 
 def zero_crossing_rate(signal, frame_length=2048, hop_length=512, center=True):
     """ Compute the zero crossing rate along the last axis.
 
-    This is simply a wrapper of zero_crossing_rate.
+    This is simply a wrapper of librosa.feature.zero_crossing_rate.
 
     Args:
         signal (np.ndarray): The signal.
@@ -312,13 +310,13 @@ def zero_crossing_rate(signal, frame_length=2048, hop_length=512, center=True):
     Returns:
         np.ndarray: The zero crossing rate along the last axis.
     """
-    return zero_crossing_rate(y=signal, frame_length=frame_length, hop_length=hop_length, center=center)
+    return librosa.feature.zero_crossing_rate(y=signal, frame_length=frame_length, hop_length=hop_length, center=center)
 
 
 def spectral_centroid(signal, sampling_frequency=16000, frame_length=2048, hop_length=512, center=True, pad_mode="constant"):
     """ Compute the spectral centroid along the last axis.
 
-    This is simply a wrapper of spectral_centroid.
+    This is simply a wrapper of librosa.feature.spectral_centroid.
 
     Args:
         signal (np.ndarray): The signal.
@@ -330,13 +328,13 @@ def spectral_centroid(signal, sampling_frequency=16000, frame_length=2048, hop_l
     Returns:
         np.ndarray: The spectral centroid along the last axis.
     """
-    return spectral_centroid(y=signal, sr=sampling_frequency, n_fft=frame_length, hop_length=hop_length, center=center, pad_mode=pad_mode)
+    return librosa.feature.spectral_centroid(y=signal, sr=sampling_frequency, n_fft=frame_length, hop_length=hop_length, center=center, pad_mode=pad_mode)
 
 
 def spectral_bandwidth(signal, sampling_frequency=16000, frame_length=2048, hop_length=512, center=True, pad_mode="constant"):
     """ Compute the spectral bandwidth along the last axis.
 
-    This is simply a wrapper of spectral_bandwidth.
+    This is simply a wrapper of librosa.feature.spectral_bandwidth.
 
     Args:
         signal (np.ndarray): The signal.
@@ -348,13 +346,13 @@ def spectral_bandwidth(signal, sampling_frequency=16000, frame_length=2048, hop_
     Returns:
         np.ndarray: The spectral bandwidth along the last axis.
     """
-    return spectral_bandwidth(y=signal, sr=sampling_frequency, n_fft=frame_length, hop_length=hop_length, center=center, pad_mode=pad_mode)
+    return librosa.feature.spectral_bandwidth(y=signal, sr=sampling_frequency, n_fft=frame_length, hop_length=hop_length, center=center, pad_mode=pad_mode)
 
 
 def spectral_rolloff(signal, sampling_frequency=16000, frame_length=2048, hop_length=512, center=True, pad_mode="constant"):
     """ Compute the spectral rolloff along the last axis.
 
-    This is simply a wrapper of spectral_rolloff.
+    This is simply a wrapper of librosa.feature.spectral_rolloff.
 
     Args:
         signal (np.ndarray): The signal.
@@ -366,13 +364,13 @@ def spectral_rolloff(signal, sampling_frequency=16000, frame_length=2048, hop_le
     Returns:
         np.ndarray: The spectral rolloff along the last axis.
     """
-    return spectral_rolloff(y=signal, sr=sampling_frequency, n_fft=frame_length, hop_length=hop_length, center=center, pad_mode=pad_mode)
+    return librosa.feature.spectral_rolloff(y=signal, sr=sampling_frequency, n_fft=frame_length, hop_length=hop_length, center=center, pad_mode=pad_mode)
 
 
 def spectral_flatness(signal, frame_length=2048, hop_length=512, center=True, pad_mode="constant"):
     """ Compute the spectral flatness along the last axis.
 
-    This is simply a wrapper of spectral_flatness.
+    This is simply a wrapper of librosa.feature.spectral_flatness.
 
     Args:
         signal (np.ndarray): The signal.
@@ -384,13 +382,13 @@ def spectral_flatness(signal, frame_length=2048, hop_length=512, center=True, pa
     Returns:
         np.ndarray: The spectral flatness along the last axis.
     """
-    return spectral_flatness(y=signal, n_fft=frame_length, hop_length=hop_length, center=center, pad_mode=pad_mode)
+    return librosa.feature.spectral_flatness(y=signal, n_fft=frame_length, hop_length=hop_length, center=center, pad_mode=pad_mode)
 
 
 def spectral_contrast(signal, sampling_frequency=16000, n_contrast_bands=5, frame_length=2048, hop_length=512, center=True, pad_mode="constant"):
     """ Compute the spectral contrast along the last axis.
 
-    This is simply a wrapper of spectral_contrast.
+    This is simply a wrapper of librosa.feature.spectral_contrast.
 
     Args:
         signal (np.ndarray): The signal.
@@ -402,7 +400,7 @@ def spectral_contrast(signal, sampling_frequency=16000, n_contrast_bands=5, fram
     Returns:
         np.ndarray: The spectral contrast along the last axis.
     """
-    return spectral_contrast(y=signal, sr=sampling_frequency, n_fft=frame_length, n_bands=n_contrast_bands, hop_length=hop_length, center=center, pad_mode=pad_mode)
+    return librosa.feature.spectral_contrast(y=signal, sr=sampling_frequency, n_fft=frame_length, n_bands=n_contrast_bands, hop_length=hop_length, center=center, pad_mode=pad_mode)
 
 
 def feature_extractor(signal, features, sampling_frequency=16000, frame_length=2048, hop_length=512, center=True, pad_mode="constant"):
