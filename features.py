@@ -424,41 +424,41 @@ def feature_extractor(signal, features, sampling_frequency=16000, n_contrast_ban
 
     for feature in features:
         if feature == "mean":
-            feature_lst.append(mean(signal, frame_length=frame_length, hop_length=hop_length, center=center, pad_mode=pad_mode).flatten())
+            feature_lst.append(mean(signal=signal, frame_length=frame_length, hop_length=hop_length, center=center, pad_mode=pad_mode).flatten())
         elif feature == "median":
-            feature_lst.append(median(signal, frame_length=frame_length, hop_length=hop_length, center=center, pad_mode=pad_mode).flatten())
+            feature_lst.append(median(signal=signal, frame_length=frame_length, hop_length=hop_length, center=center, pad_mode=pad_mode).flatten())
         elif feature == "variance":
-            feature_lst.append(variance(signal, frame_length=frame_length, hop_length=hop_length, center=center, pad_mode=pad_mode).flatten())
+            feature_lst.append(variance(signal=signal, frame_length=frame_length, hop_length=hop_length, center=center, pad_mode=pad_mode).flatten())
         elif feature == "standard_deviation":
-            feature_lst.append(standard_deviation(signal, frame_length=frame_length, hop_length=hop_length, center=center, pad_mode=pad_mode).flatten())
+            feature_lst.append(standard_deviation(signal=signal, frame_length=frame_length, hop_length=hop_length, center=center, pad_mode=pad_mode).flatten())
         elif feature == "skewness":
-            feature_lst.append(skewness(signal, frame_length=frame_length, hop_length=hop_length, center=center, pad_mode=pad_mode).flatten())
+            feature_lst.append(skewness(signal=signal, frame_length=frame_length, hop_length=hop_length, center=center, pad_mode=pad_mode).flatten())
         elif feature == "kurtosis":
-            feature_lst.append(kurtosis(signal, frame_length=frame_length, hop_length=hop_length, center=center, pad_mode=pad_mode).flatten())
+            feature_lst.append(kurtosis(signal=signal, frame_length=frame_length, hop_length=hop_length, center=center, pad_mode=pad_mode).flatten())
         elif feature == "energy":
-            feature_lst.append(energy(signal, frame_length=frame_length, hop_length=hop_length, center=center, pad_mode=pad_mode).flatten())
+            feature_lst.append(energy(signal=signal, frame_length=frame_length, hop_length=hop_length, center=center, pad_mode=pad_mode).flatten())
         elif feature == "power":
-            feature_lst.append(power(signal, frame_length=frame_length, hop_length=hop_length, center=center, pad_mode=pad_mode).flatten())
+            feature_lst.append(power(signal=signal, frame_length=frame_length, hop_length=hop_length, center=center, pad_mode=pad_mode).flatten())
         elif feature == "min":
-            feature_lst.append(min(signal, frame_length=frame_length, hop_length=hop_length, center=center, pad_mode=pad_mode).flatten())
+            feature_lst.append(min(signal=signal, frame_length=frame_length, hop_length=hop_length, center=center, pad_mode=pad_mode).flatten())
         elif feature == "max":
-            feature_lst.append(max(signal, frame_length=frame_length, hop_length=hop_length, center=center, pad_mode=pad_mode).flatten())
+            feature_lst.append(max(signal=signal, frame_length=frame_length, hop_length=hop_length, center=center, pad_mode=pad_mode).flatten())
         elif feature == "peak_to_peak":
-            feature_lst.append(peak_to_peak(signal, frame_length=frame_length, hop_length=hop_length, center=center, pad_mode=pad_mode).flatten())
+            feature_lst.append(peak_to_peak(signal=signal, frame_length=frame_length, hop_length=hop_length, center=center, pad_mode=pad_mode).flatten())
         elif feature == "root_mean_square":
-            feature_lst.append(root_mean_square(y=signal, frame_length=frame_length, hop_length=hop_length, center=center, pad_mode=pad_mode).flatten())
+            feature_lst.append(root_mean_square(signal=signal, frame_length=frame_length, hop_length=hop_length, center=center, pad_mode=pad_mode).flatten())
         elif feature == "zero_crossing_rate":
-            feature_lst.append(zero_crossing_rate(y=signal, frame_length=frame_length, hop_length=hop_length, center=center).flatten())
+            feature_lst.append(zero_crossing_rate(signal=signal, frame_length=frame_length, hop_length=hop_length, center=center).flatten())
         elif feature == "spectral_centroid":
-            feature_lst.append(spectral_centroid(y=signal, sr=sampling_frequency, n_fft=frame_length, hop_length=hop_length, center=center, pad_mode=pad_mode).flatten())
+            feature_lst.append(spectral_centroid(signal=signal, sampling_frequency=sampling_frequency, frame_length=frame_length, hop_length=hop_length, center=center, pad_mode=pad_mode).flatten())
         elif feature == "spectral_bandwidth":
-            feature_lst.append(spectral_bandwidth(y=signal, sr=sampling_frequency, n_fft=frame_length, hop_length=hop_length, center=center, pad_mode=pad_mode).flatten())
+            feature_lst.append(spectral_bandwidth(signal=signal, sampling_frequency=sampling_frequency, frame_length=frame_length, hop_length=hop_length, center=center, pad_mode=pad_mode).flatten())
         elif feature == "spectral_rolloff":
-            feature_lst.append(spectral_rolloff(y=signal, sr=sampling_frequency, n_fft=frame_length, hop_length=hop_length, center=center, pad_mode=pad_mode).flatten())
+            feature_lst.append(spectral_rolloff(signal=signal, sampling_frequency=sampling_frequency, frame_length=frame_length, hop_length=hop_length, center=center, pad_mode=pad_mode).flatten())
         elif feature == "spectral_flatness":
-            feature_lst.append(spectral_flatness(y=signal, n_fft=frame_length, hop_length=hop_length, center=center, pad_mode=pad_mode).flatten())
+            feature_lst.append(spectral_flatness(signal=signal, frame_length=frame_length, hop_length=hop_length, center=center, pad_mode=pad_mode).flatten())
         elif feature == "spectral_contrast":
-            feature_values = spectral_contrast(y=signal, sr=sampling_frequency, n_fft=frame_length, n_bands=n_contrast_bands, hop_length=hop_length, center=center, pad_mode=pad_mode)
+            feature_values = spectral_contrast(signal=signal, sampling_frequency=sampling_frequency, n_contrast_bands=n_contrast_bands, frame_length=frame_length, hop_length=hop_length, center=center, pad_mode=pad_mode)
             for i in range(feature_values.shape[0]):
                 feature_lst.append(feature_values[i])
         else:
