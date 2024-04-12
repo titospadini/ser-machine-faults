@@ -528,9 +528,11 @@ def feature_extractor(signal, features, sampling_frequency=16000, n_contrast_ban
                 feature_lst.append(feature_values[i])
         elif feature == "spectral_contrast":
             feature_values = spectral_contrast(signal=signal, sampling_frequency=sampling_frequency, n_contrast_bands=n_contrast_bands, frame_length=frame_length, hop_length=hop_length, center=center, pad_mode=pad_mode)
-            for i in range(feature_values.shape[0]):
+            feature_components = feature_values.shape[0]
+            component_lst.append(feature_components)
+            for i in range(feature_components):
                 feature_lst.append(feature_values[i])
         else:
             raise ValueError(f"Invalid feature: {feature}.")
 
-    return np.array(feature_lst)
+    return np.array(feature_lst), component_lst
