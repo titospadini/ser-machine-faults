@@ -403,7 +403,7 @@ def spectral_contrast(signal, sampling_frequency=16000, n_contrast_bands=5, fram
     return librosa.feature.spectral_contrast(y=signal, sr=sampling_frequency, n_fft=frame_length, n_bands=n_contrast_bands, hop_length=hop_length, center=center, pad_mode=pad_mode)
 
 
-def feature_extractor(signal, features, sampling_frequency=16000, frame_length=2048, hop_length=512, center=True, pad_mode="constant"):
+def feature_extractor(signal, features, sampling_frequency=16000, n_contrast_bands=5, frame_length=2048, hop_length=512, center=True, pad_mode="constant"):
     """ Extract features from a signal.
 
     Args:
@@ -457,6 +457,10 @@ def feature_extractor(signal, features, sampling_frequency=16000, frame_length=2
             feature_lst.append(spectral_rolloff(y=signal, sr=sampling_frequency, n_fft=frame_length, hop_length=hop_length, center=center, pad_mode=pad_mode).flatten())
         elif feature == "spectral_flatness":
             feature_lst.append(spectral_flatness(y=signal, n_fft=frame_length, hop_length=hop_length, center=center, pad_mode=pad_mode).flatten())
+        elif feature == "spectral_contrast":
+            feature_values = spectral_contrast(y=signal, sr=sampling_frequency, n_fft=frame_length, n_bands=n_contrast_bands, hop_length=hop_length, center=center, pad_mode=pad_mode)
+            for i in range(feature_values.shape[0]):
+                feature_lst.append(feature_values[i])
         else:
             raise ValueError(f"Invalid feature: {feature}.")
 
