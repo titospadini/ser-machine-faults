@@ -279,6 +279,132 @@ def peak_to_peak(signal, frame_length=2048, hop_length=512, center=True, pad_mod
     return np.max(framed_signal, axis=-2, keepdims=True) - np.min(framed_signal, axis=-2, keepdims=True)
 
 
+def root_mean_square(signal, frame_length=2048, hop_length=512, center=True, pad_mode="constant"):
+    """ Compute the root mean square along the last axis.
+
+    This is simply a wrapper of rmse.
+
+    Args:
+        signal (np.ndarray): The signal.
+        frame_length (int, optional): The frame length. Defaults to 2048.
+        hop_length (int, optional): The hop length. Defaults to 512.
+        center (bool, optional): Pad the signal by half the frame length. Defaults to True.
+        pad_mode (str, optional): The padding mode. Defaults to "constant".
+
+    Returns:
+        np.ndarray: The root mean square along the last axis.
+    """
+    return rms(y=signal, frame_length=frame_length, hop_length=hop_length, center=center, pad_mode=pad_mode)
+
+
+def zero_crossing_rate(signal, frame_length=2048, hop_length=512, center=True):
+    """ Compute the zero crossing rate along the last axis.
+
+    This is simply a wrapper of zero_crossing_rate.
+
+    Args:
+        signal (np.ndarray): The signal.
+        frame_length (int, optional): The frame length. Defaults to 2048.
+        hop_length (int, optional): The hop length. Defaults to 512.
+        center (bool, optional): Pad the signal by half the frame length. Defaults to True.
+        pad_mode (str, optional): The padding mode. Defaults to "constant".
+
+    Returns:
+        np.ndarray: The zero crossing rate along the last axis.
+    """
+    return zero_crossing_rate(y=signal, frame_length=frame_length, hop_length=hop_length, center=center)
+
+
+def spectral_centroid(signal, sampling_frequency=16000, frame_length=2048, hop_length=512, center=True, pad_mode="constant"):
+    """ Compute the spectral centroid along the last axis.
+
+    This is simply a wrapper of spectral_centroid.
+
+    Args:
+        signal (np.ndarray): The signal.
+        frame_length (int, optional): The frame length. Defaults to 2048.
+        hop_length (int, optional): The hop length. Defaults to 512.
+        center (bool, optional): Pad the signal by half the frame length. Defaults to True.
+        pad_mode (str, optional): The padding mode. Defaults to "constant".
+
+    Returns:
+        np.ndarray: The spectral centroid along the last axis.
+    """
+    return spectral_centroid(y=signal, sr=sampling_frequency, n_fft=frame_length, hop_length=hop_length, center=center, pad_mode=pad_mode)
+
+
+def spectral_bandwidth(signal, sampling_frequency=16000, frame_length=2048, hop_length=512, center=True, pad_mode="constant"):
+    """ Compute the spectral bandwidth along the last axis.
+
+    This is simply a wrapper of spectral_bandwidth.
+
+    Args:
+        signal (np.ndarray): The signal.
+        frame_length (int, optional): The frame length. Defaults to 2048.
+        hop_length (int, optional): The hop length. Defaults to 512.
+        center (bool, optional): Pad the signal by half the frame length. Defaults to True.
+        pad_mode (str, optional): The padding mode. Defaults to "constant".
+
+    Returns:
+        np.ndarray: The spectral bandwidth along the last axis.
+    """
+    return spectral_bandwidth(y=signal, sr=sampling_frequency, n_fft=frame_length, hop_length=hop_length, center=center, pad_mode=pad_mode)
+
+
+def spectral_rolloff(signal, sampling_frequency=16000, frame_length=2048, hop_length=512, center=True, pad_mode="constant"):
+    """ Compute the spectral rolloff along the last axis.
+
+    This is simply a wrapper of spectral_rolloff.
+
+    Args:
+        signal (np.ndarray): The signal.
+        frame_length (int, optional): The frame length. Defaults to 2048.
+        hop_length (int, optional): The hop length. Defaults to 512.
+        center (bool, optional): Pad the signal by half the frame length. Defaults to True.
+        pad_mode (str, optional): The padding mode. Defaults to "constant".
+
+    Returns:
+        np.ndarray: The spectral rolloff along the last axis.
+    """
+    return spectral_rolloff(y=signal, sr=sampling_frequency, n_fft=frame_length, hop_length=hop_length, center=center, pad_mode=pad_mode)
+
+
+def spectral_flatness(signal, frame_length=2048, hop_length=512, center=True, pad_mode="constant"):
+    """ Compute the spectral flatness along the last axis.
+
+    This is simply a wrapper of spectral_flatness.
+
+    Args:
+        signal (np.ndarray): The signal.
+        frame_length (int, optional): The frame length. Defaults to 2048.
+        hop_length (int, optional): The hop length. Defaults to 512.
+        center (bool, optional): Pad the signal by half the frame length. Defaults to True.
+        pad_mode (str, optional): The padding mode. Defaults to "constant".
+
+    Returns:
+        np.ndarray: The spectral flatness along the last axis.
+    """
+    return spectral_flatness(y=signal, n_fft=frame_length, hop_length=hop_length, center=center, pad_mode=pad_mode)
+
+
+def spectral_contrast(signal, sampling_frequency=16000, n_contrast_bands=5, frame_length=2048, hop_length=512, center=True, pad_mode="constant"):
+    """ Compute the spectral contrast along the last axis.
+
+    This is simply a wrapper of spectral_contrast.
+
+    Args:
+        signal (np.ndarray): The signal.
+        frame_length (int, optional): The frame length. Defaults to 2048.
+        hop_length (int, optional): The hop length. Defaults to 512.
+        center (bool, optional): Pad the signal by half the frame length. Defaults to True.
+        pad_mode (str, optional): The padding mode. Defaults to "constant".
+
+    Returns:
+        np.ndarray: The spectral contrast along the last axis.
+    """
+    return spectral_contrast(y=signal, sr=sampling_frequency, n_fft=frame_length, n_bands=n_contrast_bands, hop_length=hop_length, center=center, pad_mode=pad_mode)
+
+
 def feature_extractor(signal, features, sampling_frequency=16000, frame_length=2048, hop_length=512, center=True, pad_mode="constant"):
     """ Extract features from a signal.
 
@@ -322,7 +448,7 @@ def feature_extractor(signal, features, sampling_frequency=16000, frame_length=2
         elif feature == "peak_to_peak":
             feature_lst.append(peak_to_peak(signal, frame_length=frame_length, hop_length=hop_length, center=center, pad_mode=pad_mode).flatten())
         elif feature == "root_mean_square":
-            feature_lst.append(rms(y=signal, frame_length=frame_length, hop_length=hop_length, center=center, pad_mode=pad_mode).flatten())
+            feature_lst.append(root_mean_square(y=signal, frame_length=frame_length, hop_length=hop_length, center=center, pad_mode=pad_mode).flatten())
         elif feature == "zero_crossing_rate":
             feature_lst.append(zero_crossing_rate(y=signal, frame_length=frame_length, hop_length=hop_length, center=center).flatten())
         elif feature == "spectral_centroid":
