@@ -162,6 +162,27 @@ def audio_to_df(path, mixing_method="sum", normalize_dbfs=-6, new_sampling_frequ
     return df
 
 
+def expand_feature_lst(feature_lst, n_components_lst):
+    """Expands the feature list when there are multiple components involved.
+
+    Args:
+        feature_lst (list): list of features.
+        n_components_lst (list): list of number of components.
+
+    Returns:
+        list: list of expanded features.
+    """
+    new_feature_lst = []
+    for feature, n_components in zip(feature_lst, n_components_lst):
+        if n_components == 1:
+            new_feature_lst.append(feature)
+        elif n_components > 1:
+            for i in range(1, n_components + 1):
+                new_feature_lst.append(f"{feature}_{i}")
+
+    return new_feature_lst
+
+
 def plot_confusion_matrix(y_true, y_pred, labels, color_map="viridis", print_colorbar=False, print_numbers=True, print_boxes=False):
     """Plots a confusion matrix.
 
