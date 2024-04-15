@@ -44,6 +44,10 @@ FEATURES_LST = [
                 "spectral_rolloff",
                 "spectral_flatness",
                 "spectral_contrast",
+                # "tonnetz",
+                "mfcc",
+                "delta_mfcc",
+                "delta_delta_mfcc"
                 ]
 
 
