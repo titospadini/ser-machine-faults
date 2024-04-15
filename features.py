@@ -403,7 +403,7 @@ def spectral_contrast(signal, sampling_frequency=16000, n_contrast_bands=5, fram
     return librosa.feature.spectral_contrast(y=signal, sr=sampling_frequency, n_fft=frame_length, n_bands=n_contrast_bands, hop_length=hop_length, center=center, pad_mode=pad_mode)
 
 
-def tonnetz(signal, sampling_frequency=16000, chroma=None, frame_length=2048, hop_length=512, center=True, pad_mode="constant"):
+def tonnetz(signal, sampling_frequency=16000, chroma=None, hop_length=512):
     """ Compute the tonal centroid along the last axis.
 
     This is simply a wrapper of librosa.feature.tonnetz.
@@ -420,7 +420,7 @@ def tonnetz(signal, sampling_frequency=16000, chroma=None, frame_length=2048, ho
     Returns:
         np.ndarray: The tonal centroid along the last axis.
     """
-    return librosa.feature.tonnetz(y=signal, sr=sampling_frequency, chroma=chroma, n_fft=frame_length, hop_length=hop_length, center=center, pad_mode=pad_mode)
+    return librosa.feature.tonnetz(y=signal, sr=sampling_frequency, chroma=chroma, hop_length=hop_length)
 
 
 def mfcc(signal, sampling_frequency=16000, n_mfcc=20, dct_type=2, norm="ortho", lifter=0, frame_length=2048, hop_length=512, center=True, pad_mode="constant"):
@@ -470,8 +470,7 @@ def delta_mfcc(signal, width=9, order=1, axis=-1, mode="interp", sampling_freque
     Returns:
         np.ndarray: The delta mel-frequency cepstral coefficients along the last axis.
     """
-    mfcc = mfcc(signal, sampling_frequency=sampling_frequency, n_mfcc=n_mfcc, dct_type=dct_type, norm=norm, lifter=lifter, frame_length=frame_length, hop_length=hop_length, center=center, pad_mode=pad_mode)
-    return librosa.feature.delta(mfcc, width=width, order=order, axis=axis, mode=mode)
+    return librosa.feature.delta(mfcc(signal, sampling_frequency=sampling_frequency, n_mfcc=n_mfcc, dct_type=dct_type, norm=norm, lifter=lifter, frame_length=frame_length, hop_length=hop_length, center=center, pad_mode=pad_mode), width=width, order=order, axis=axis, mode=mode)
 
 
 def feature_extractor(signal, features, sampling_frequency=16000, n_contrast_bands=5, chroma=None, n_mfcc=20, dct_type=2, norm="ortho", lifter=0, width=9, axis=-1, mode="interp", frame_length=2048, hop_length=512, center=True, pad_mode="constant"):
@@ -614,7 +613,7 @@ def feature_extractor(signal, features, sampling_frequency=16000, n_contrast_ban
             for i in range(feature_components):
                 feature_lst.append(feature_values[i])
         elif feature == "tonnetz":
-            feature_values = tonnetz(signal=signal, sampling_frequency=sampling_frequency, chroma=chroma, frame_length=frame_length, hop_length=hop_length, center=center, pad_mode=pad_mode)
+            feature_values = tonnetz(signal=signal, sampling_frequency=sampling_frequency, chroma=chroma, hop_length=hop_length)
             feature_components = feature_values.shape[0]
             component_lst.append(feature_components)
             for i in range(feature_components):
