@@ -403,6 +403,24 @@ def spectral_contrast(signal, sampling_frequency=16000, n_contrast_bands=5, fram
     return librosa.feature.spectral_contrast(y=signal, sr=sampling_frequency, n_fft=frame_length, n_bands=n_contrast_bands, hop_length=hop_length, center=center, pad_mode=pad_mode)
 
 
+def tonnetz(signal, sampling_frequency=16000, chroma=None, frame_length=2048, hop_length=512, center=True, pad_mode="constant"):
+    """ Compute the tonal centroid along the last axis.
+
+    This is simply a wrapper of librosa.feature.tonnetz.
+
+    Args:
+        signal (np.ndarray): The signal.
+        frame_length (int, optional): The frame length. Defaults to 2048.
+        hop_length (int, optional): The hop length. Defaults to 512.
+        center (bool, optional): Pad the signal by half the frame length. Defaults to True.
+        pad_mode (str, optional): The padding mode. Defaults to "constant".
+
+    Returns:
+        np.ndarray: The tonal centroid along the last axis.
+    """
+    return librosa.feature.tonnetz(y=signal, sr=sampling_frequency, chroma=chroma, n_fft=frame_length, hop_length=hop_length, center=center, pad_mode=pad_mode)
+
+
 def feature_extractor(signal, features, sampling_frequency=16000, n_contrast_bands=5, frame_length=2048, hop_length=512, center=True, pad_mode="constant"):
     """ Extract features from a signal.
 
@@ -528,6 +546,12 @@ def feature_extractor(signal, features, sampling_frequency=16000, n_contrast_ban
                 feature_lst.append(feature_values[i])
         elif feature == "spectral_contrast":
             feature_values = spectral_contrast(signal=signal, sampling_frequency=sampling_frequency, n_contrast_bands=n_contrast_bands, frame_length=frame_length, hop_length=hop_length, center=center, pad_mode=pad_mode)
+            feature_components = feature_values.shape[0]
+            component_lst.append(feature_components)
+            for i in range(feature_components):
+                feature_lst.append(feature_values[i])
+        elif feature == "tonnetz":
+            feature_values = tonnetz(signal=signal, sampling_frequency=sampling_frequency, chroma=chroma, frame_length=frame_length, hop_length=hop_length, center=center, pad_mode=pad_mode)
             feature_components = feature_values.shape[0]
             component_lst.append(feature_components)
             for i in range(feature_components):
