@@ -410,6 +410,8 @@ def tonnetz(signal, sampling_frequency=16000, chroma=None, frame_length=2048, ho
 
     Args:
         signal (np.ndarray): The signal.
+        sampling_frequency (int, optional): The sampling frequency. Defaults to 16000.
+        chroma (np.ndarray, optional): The chroma matrix. Defaults to None.
         frame_length (int, optional): The frame length. Defaults to 2048.
         hop_length (int, optional): The hop length. Defaults to 512.
         center (bool, optional): Pad the signal by half the frame length. Defaults to True.
@@ -421,12 +423,73 @@ def tonnetz(signal, sampling_frequency=16000, chroma=None, frame_length=2048, ho
     return librosa.feature.tonnetz(y=signal, sr=sampling_frequency, chroma=chroma, n_fft=frame_length, hop_length=hop_length, center=center, pad_mode=pad_mode)
 
 
-def feature_extractor(signal, features, sampling_frequency=16000, n_contrast_bands=5, frame_length=2048, hop_length=512, center=True, pad_mode="constant"):
+def mfcc(signal, sampling_frequency=16000, n_mfcc=20, dct_type=2, norm="ortho", lifter=0, frame_length=2048, hop_length=512, center=True, pad_mode="constant"):
+    """ Compute the mel-frequency cepstral coefficients along the last axis.
+
+    This is simply a wrapper of librosa.feature.mfcc.
+
+    Args:
+        signal (np.ndarray): The signal.
+        sampling_frequency (int, optional): The sampling frequency. Defaults to 16000.
+        n_mfcc (int, optional): The number of mel-frequency cepstral coefficients. Defaults to 20.
+        dct_type (int, optional): The type of DCT. Defaults to 2.
+        norm (str, optional): The normalization. Defaults to "ortho".
+        lifter (int, optional): The lifter. Defaults to 0.
+        frame_length (int, optional): The frame length. Defaults to 2048.
+        hop_length (int, optional): The hop length. Defaults to 512.
+        center (bool, optional): Pad the signal by half the frame length. Defaults to True.
+        pad_mode (str, optional): The padding mode. Defaults to "constant".
+
+    Returns:
+        np.ndarray: The mel-frequency cepstral coefficients along the last axis.
+    """
+    return librosa.feature.mfcc(y=signal, sr=sampling_frequency, n_mfcc=n_mfcc, dct_type=dct_type, norm=norm, lifter=lifter, n_fft=frame_length, hop_length=hop_length, center=center, pad_mode=pad_mode)
+
+
+def delta_mfcc(signal, width=9, order=1, axis=-1, mode="interp", sampling_frequency=16000, n_mfcc=20, dct_type=2, norm="ortho", lifter=0, frame_length=2048, hop_length=512, center=True, pad_mode="constant"):
+    """ Compute the delta mel-frequency cepstral coefficients along the last axis.
+
+    This is simply a wrapper of librosa.feature.delta.
+
+    Args:
+        signal (np.ndarray): The signal.
+        width (int, optional): The width. Defaults to 9.
+        order (int, optional): The order. Defaults to 1.
+        axis (int, optional): The axis. Defaults to -1.
+        mode (str, optional): The mode. Defaults to "interp".
+        sampling_frequency (int, optional): The sampling frequency. Defaults to 16000.
+        n_mfcc (int, optional): The number of mel-frequency cepstral coefficients. Defaults to 20.
+        dct_type (int, optional): The type of DCT. Defaults to 2.
+        norm (str, optional): The normalization. Defaults to "ortho".
+        lifter (int, optional): The lifter. Defaults to 0.
+        frame_length (int, optional): The frame length. Defaults to 2048.
+        hop_length (int, optional): The hop length. Defaults to 512.
+        center (bool, optional): Pad the signal by half the frame length. Defaults to True.
+        pad_mode (str, optional): The padding mode. Defaults to "constant".
+
+    Returns:
+        np.ndarray: The delta mel-frequency cepstral coefficients along the last axis.
+    """
+    mfcc = mfcc(signal, sampling_frequency=sampling_frequency, n_mfcc=n_mfcc, dct_type=dct_type, norm=norm, lifter=lifter, frame_length=frame_length, hop_length=hop_length, center=center, pad_mode=pad_mode)
+    return librosa.feature.delta(mfcc, width=width, order=order, axis=axis, mode=mode)
+
+
+def feature_extractor(signal, features, sampling_frequency=16000, n_contrast_bands=5, chroma=None, n_mfcc=20, dct_type=2, norm="ortho", lifter=0, width=9, axis=-1, mode="interp", frame_length=2048, hop_length=512, center=True, pad_mode="constant"):
     """ Extract features from a signal.
 
     Args:
         signal (np.ndarray): The signal.
         features (list): The list of features to extract.
+        sampling_frequency (int, optional): The sampling frequency. Defaults to 16000.
+        n_contrast_bands (int, optional): The number of contrast bands for spectral contrast. Defaults to 5.
+        chroma (np.ndarray, optional): The chroma matrix for Tonnetz feature. Defaults to None.
+        n_mfcc (int, optional): The number of mel-frequency cepstral coefficients. Defaults to 20.
+        dct_type (int, optional): The type of DCT for MFCC. Defaults to 2.
+        norm (str, optional): The normalization for MFCC. Defaults to "ortho".
+        lifter (int, optional): The lifter for MFCC. Defaults to 0.
+        width (int, optional): The width for delta MFCC. Defaults to 9.
+        axis (int, optional): The axis for delta MFCC. Defaults to -1.
+        mode (str, optional): The mode for delta MFCC. Defaults to "interp".
         frame_length (int, optional): The frame length. Defaults to 2048.
         hop_length (int, optional): The hop length. Defaults to 512.
         center (bool, optional): Pad the signal by half the frame length. Defaults to True.
@@ -552,6 +615,24 @@ def feature_extractor(signal, features, sampling_frequency=16000, n_contrast_ban
                 feature_lst.append(feature_values[i])
         elif feature == "tonnetz":
             feature_values = tonnetz(signal=signal, sampling_frequency=sampling_frequency, chroma=chroma, frame_length=frame_length, hop_length=hop_length, center=center, pad_mode=pad_mode)
+            feature_components = feature_values.shape[0]
+            component_lst.append(feature_components)
+            for i in range(feature_components):
+                feature_lst.append(feature_values[i])
+        elif feature == "mfcc":
+            feature_values = mfcc(signal=signal, sampling_frequency=sampling_frequency, n_mfcc=n_mfcc, dct_type=dct_type, norm=norm, lifter=lifter, frame_length=frame_length, hop_length=hop_length, center=center, pad_mode=pad_mode)
+            feature_components = feature_values.shape[0]
+            component_lst.append(feature_components)
+            for i in range(feature_components):
+                feature_lst.append(feature_values[i])
+        elif feature == "delta_mfcc":
+            feature_values = delta_mfcc(signal=signal, sampling_frequency=sampling_frequency, n_mfcc=n_mfcc, width=width, axis=axis, mode=mode, frame_length=frame_length, hop_length=hop_length, center=center, pad_mode=pad_mode)
+            feature_components = feature_values.shape[0]
+            component_lst.append(feature_components)
+            for i in range(feature_components):
+                feature_lst.append(feature_values[i])
+        elif feature == "delta_delta_mfcc":
+            feature_values = delta_mfcc(signal=signal, sampling_frequency=sampling_frequency, n_mfcc=n_mfcc, width=width, axis=axis, mode=mode, frame_length=frame_length, hop_length=hop_length, center=center, pad_mode=pad_mode)
             feature_components = feature_values.shape[0]
             component_lst.append(feature_components)
             for i in range(feature_components):
