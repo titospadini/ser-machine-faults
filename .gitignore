@@ -4,4 +4,4 @@ __pycache__
 
 # files
 test*.ipynb
-data.csv
+*.csv
