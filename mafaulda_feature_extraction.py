@@ -10,13 +10,14 @@ from utils import *
 # ----- hyperparameters -----
 # ===========================
 BASE_DIR = "/home/tito/datasets/MAFAULDA"
+OUTPUT_CSV_PATH = "mafaulda_16khz_500ms_20ms_40-mfcc.csv"
 
 ORIGINAL_SAMPLING_FREQUENCY = 50000 # 50 kHz
-NEW_SAMPLING_FREQUENCY      = 16000 # 16 kHz
+NEW_SAMPLING_FREQUENCY      = 16000  # 16 kHz
 NORMALIZE_DBFS              = -6    # -6 dBFS
 SILENCE_THRESHOLD_DBFS      = -48   # -48 dBFS
 SEGMENT_DURATION            = 500   # 500 ms
-OVERLAP_DURATION            = 100   # 100 ms
+OVERLAP_DURATION            = 20    # 100 ms
 
 FRAME_LENGTH                = int(SEGMENT_DURATION / 1000 * NEW_SAMPLING_FREQUENCY)
 HOP_LENGTH                  = int((SEGMENT_DURATION - OVERLAP_DURATION) / 1000 * NEW_SAMPLING_FREQUENCY)
@@ -325,4 +326,4 @@ df["label"] = df["class"].map({ 0: "normal",
                                 4: "overhang",
                                 5: "underhang"}
                                 )
-df.to_csv("data.csv", index=False)
+df.to_csv(OUTPUT_CSV_PATH, index=False)
