@@ -473,7 +473,7 @@ def delta_mfcc(signal, width=9, order=1, axis=-1, mode="interp", sampling_freque
     return librosa.feature.delta(mfcc(signal, sampling_frequency=sampling_frequency, n_mfcc=n_mfcc, dct_type=dct_type, norm=norm, lifter=lifter, frame_length=frame_length, hop_length=hop_length, center=center, pad_mode=pad_mode), width=width, order=order, axis=axis, mode=mode)
 
 
-def feature_extractor(signal, features, sampling_frequency=16000, n_contrast_bands=5, chroma=None, n_mfcc=20, dct_type=2, norm="ortho", lifter=0, width=9, axis=-1, mode="interp", frame_length=2048, hop_length=512, center=True, pad_mode="constant"):
+def feature_extractor(signal, features, sampling_frequency=16000, n_contrast_bands=5, chroma=None, n_mfcc=40, dct_type=2, norm="ortho", lifter=0, width=9, axis=-1, mode="interp", frame_length=2048, hop_length=512, center=True, pad_mode="constant"):
     """ Extract features from a signal.
 
     Args:
