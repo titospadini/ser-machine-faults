@@ -2,6 +2,7 @@
 __pycache__
 .ipynb_checkpoints
 results
+data/MAFAULDA
 
 # files
 test*.ipynb
