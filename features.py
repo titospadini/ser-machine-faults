@@ -470,7 +470,20 @@ def delta_mfcc(signal, width=9, order=1, axis=-1, mode="interp", sampling_freque
     Returns:
         np.ndarray: The delta mel-frequency cepstral coefficients along the last axis.
     """
-    return librosa.feature.delta(mfcc(signal, sampling_frequency=sampling_frequency, n_mfcc=n_mfcc, dct_type=dct_type, norm=norm, lifter=lifter, frame_length=frame_length, hop_length=hop_length, center=center, pad_mode=pad_mode), width=width, order=order, axis=axis, mode=mode)
+    # Compute MFCC
+    mfcc_features = librosa.feature.mfcc(y=signal, sr=sampling_frequency, n_mfcc=n_mfcc, dct_type=dct_type, norm=norm, lifter=lifter, n_fft=frame_length, hop_length=hop_length, center=center, pad_mode=pad_mode)
+
+    # Verify the dimension along the specified axis
+    data_shape = mfcc_features.shape[axis]
+
+    # Adjust width if it exceeds the data shape
+    if data_shape < width:
+        width = data_shape - 1 if data_shape > 1 else 1  # Ensure width is at least 1
+
+    # Compute delta features
+    delta_features = librosa.feature.delta(mfcc_features, width=width, order=order, axis=axis, mode=mode)
+
+    return delta_features
 
 
 def feature_extractor(signal, features, sampling_frequency=16000, n_contrast_bands=5, chroma=None, n_mfcc=40, dct_type=2, norm="ortho", lifter=0, width=9, axis=-1, mode="interp", frame_length=2048, hop_length=512, center=True, pad_mode="constant"):
