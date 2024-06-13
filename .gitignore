@@ -4,6 +4,7 @@ __pycache__
 results
 corpora/*MAFAULDA*
 data
+models
 
 # files
 test*.ipynb
