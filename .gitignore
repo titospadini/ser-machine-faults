@@ -3,6 +3,7 @@ __pycache__
 .ipynb_checkpoints
 results
 corpora/*MAFAULDA*
+corpora/*MIMII*
 data
 models
 
