@@ -152,6 +152,54 @@ def kurtosis(signal, frame_length=2048, hop_length=512, center=True, pad_mode="c
     return stats.kurtosis(framed_signal, axis=-2, keepdims=True)
 
 
+
+def compute_probability(frame):
+    """Compute the probability distribution from a single frame."""
+    # Normalize the frame from [-1, 1] to [0, 1]
+    frame = (frame + 1) / 2
+    
+    # Calculate the histogram
+    histogram, bin_edges = np.histogram(frame, bins=256, range=(0, 1), density=True)
+    
+    # Calculate the probability
+    probability = histogram * np.diff(bin_edges)
+    
+    return probability
+
+def entropy(signal, frame_length=2048, hop_length=512, center=True, pad_mode="constant"):
+    """Compute the Shannon entropy along the last axis.
+
+    Args:
+        signal (np.ndarray): The signal.
+        frame_length (int, optional): The frame length. Defaults to 2048.
+        hop_length (int, optional): The hop length. Defaults to 512.
+        center (bool, optional): Pad the signal by half the frame length. Defaults to True.
+        pad_mode (str, optional): The padding mode. Defaults to "constant".
+
+    Returns:
+        np.ndarray: The Shannon entropy along the last axis with shape (1, N).
+    """
+    signal = np.asarray(signal)
+
+    if center:
+        padding = [(0, 0) for _ in range(signal.ndim)]
+        padding[-1] = (int(frame_length // 2), int(frame_length // 2))
+        signal = np.pad(signal, padding, mode=pad_mode)
+
+    # Framing the signal
+    framed_signal = librosa.util.frame(signal, frame_length=frame_length, hop_length=hop_length)
+
+    # Calculate entropy for each frame
+    entropy_values = np.array([stats.entropy(compute_probability(frame) + np.finfo(float).eps)
+                               for frame in framed_signal.T])
+    
+    # Ensure the shape is (1, N)
+    entropy_values = entropy_values.reshape(1, -1)
+
+    return entropy_values
+
+
+
 def energy(signal, frame_length=2048, hop_length=512, center=True, pad_mode="constant"):
     """ Compute the energy along the last axis.
 
@@ -549,6 +597,12 @@ def feature_extractor(signal, features, sampling_frequency=16000, n_contrast_ban
                 feature_lst.append(feature_values[i])
         elif feature == "kurtosis":
             feature_values = kurtosis(signal=signal, frame_length=frame_length, hop_length=hop_length, center=center, pad_mode=pad_mode)
+            feature_components = feature_values.shape[0]
+            component_lst.append(feature_components)
+            for i in range(feature_components):
+                feature_lst.append(feature_values[i])
+        elif feature == "entropy":
+            feature_values = entropy(signal=signal, frame_length=frame_length, hop_length=hop_length, center=center, pad_mode=pad_mode)
             feature_components = feature_values.shape[0]
             component_lst.append(feature_components)
             for i in range(feature_components):
