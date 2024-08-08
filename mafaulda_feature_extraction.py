@@ -14,8 +14,8 @@ logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(
 
 # Configuration and constants
 class Config:
-    BASE_DIR        = "/home/tito/ser-machine-faults/data/augmented_MAFAULDA_24khz_16bits"
-    OUTPUT_CSV_PATH = "augmented_mafaulda_24khz_500ms_20ms_40-mfcc.csv"
+    BASE_DIR        = "/home/tito/ser-machine-faults/corpora/MAFAULDA_24khz_16bits"
+    OUTPUT_CSV_PATH = "data/mafaulda_main_classes_24khz_500ms_20ms_40-mfcc.csv"
 
     SEGMENT_DURATION    = 500   # 500 ms
     OVERLAP_DURATION    = 20    # 20 ms
@@ -25,7 +25,7 @@ class Config:
     HOP_LENGTH      = int((SEGMENT_DURATION - OVERLAP_DURATION) / 1000 * SAMPLING_FREQUENCY)
 
     FEATURES_LST = [
-        "mean", "median", "variance", "standard_deviation", "skewness", "kurtosis",
+        "mean", "median", "variance", "standard_deviation", "skewness", "kurtosis", "entropy",
         "energy", "power", "min", "max", "peak_to_peak", "root_mean_square", "zero_crossing_rate",
         "spectral_centroid", "spectral_bandwidth", "spectral_rolloff", "spectral_flatness",
         "spectral_contrast", "mfcc", "delta_mfcc", "delta_delta_mfcc"
