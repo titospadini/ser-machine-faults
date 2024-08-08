@@ -6,8 +6,18 @@ corpora/*MAFAULDA*
 corpora/*MIMII*
 data
 models
+runs
 
 # files
 test*.ipynb
 *.csv
+*.npy
+*.npz
+*.pdf
+*.png
+*.pth
+*.txt
 mafaulda_subclasses_cascade.ipynb
+
+# temporary files and folders
+*tmp*
