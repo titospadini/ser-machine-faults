@@ -9,7 +9,6 @@ models
 runs
 
 # files
-test*.ipynb
 *.csv
 *.npy
 *.npz
@@ -18,6 +17,8 @@ test*.ipynb
 *.pth
 *.txt
 mafaulda_subclasses_cascade.ipynb
+mimii*
+test*.ipynb
 
 # temporary files and folders
 *tmp*
