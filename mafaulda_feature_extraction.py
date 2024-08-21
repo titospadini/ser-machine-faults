@@ -6,20 +6,39 @@ import soundfile as sf
 from tqdm import tqdm
 
 import logging
+import argparse
 
 from features import feature_extractor
 from utils import *
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
+# Argument parsing
+parser = argparse.ArgumentParser(description='Process audio files and extract features.')
+parser.add_argument('-s', '--segment', type=int, default=500, help='Segment duration in ms (default: 500)')
+parser.add_argument('-l', '--overlap', type=int, default=20, help='Overlap duration in ms (default: 20)')
+parser.add_argument('-f', '--frequency', type=int, default=24000, help='Sampling frequency in Hz (default: 24000)')
+parser.add_argument('-m', '--mfcc', type=int, default=40, help='Number of MFCC coefficients (default: 40)')
+parser.add_argument('-c', '--contrast', type=int, default=5, help='Number of spectral contrast bands (default: 5)')
+parser.add_argument('-i', '--input_path', type=str, default="/home/tito/ser-machine-faults/corpora/MAFAULDA_24khz_16bits", help='Path to input directory (default: /home/tito/ser-machine-faults/corpora/MAFAULDA_24khz_16bits)')
+parser.add_argument('-o', '--output_path', type=str, default=None, help='Path to output CSV file (if not provided, it will be generated automatically)')
+
+args = parser.parse_args()
+
 # Configuration and constants
 class Config:
-    BASE_DIR        = "/home/tito/ser-machine-faults/corpora/MAFAULDA_24khz_16bits"
-    OUTPUT_CSV_PATH = "data/mafaulda_main_classes_24khz_500ms_20ms_40-mfcc.csv"
+    BASE_DIR            = args.input_path
+    SEGMENT_DURATION    = args.segment
+    OVERLAP_DURATION    = args.overlap
+    SAMPLING_FREQUENCY  = args.frequency
+    N_MFCC              = args.mfcc
+    N_CONTRAST_BANDS    = args.contrast
 
-    SEGMENT_DURATION    = 500   # 500 ms
-    OVERLAP_DURATION    = 20    # 20 ms
-    SAMPLING_FREQUENCY  = 24000 # 24 kHz
+    # Generate output path dynamically if not provided
+    if args.output_path is None:
+        OUTPUT_CSV_PATH = f"data/mafaulda_main_classes_{SAMPLING_FREQUENCY // 1000}khz_{SEGMENT_DURATION}ms_{OVERLAP_DURATION}ms_{N_MFCC}-mfcc.csv"
+    else:
+        OUTPUT_CSV_PATH = args.output_path
 
     FRAME_LENGTH    = int(SEGMENT_DURATION / 1000 * SAMPLING_FREQUENCY)
     HOP_LENGTH      = int((SEGMENT_DURATION - OVERLAP_DURATION) / 1000 * SAMPLING_FREQUENCY)
@@ -128,7 +147,7 @@ def read_and_process_audio_file(file_path, config):
     audio, _ = sf.read(file_path)
 
     # Feature extraction (with segmentation)
-    features, n_components_lst = feature_extractor(audio, features=config.FEATURES_LST, frame_length=config.FRAME_LENGTH, hop_length=config.HOP_LENGTH, center=False, pad_mode="constant")
+    features, n_components_lst = feature_extractor(audio, features=config.FEATURES_LST, n_mfcc=config.N_MFCC, n_contrast_bands=config.N_CONTRAST_BANDS, frame_length=config.FRAME_LENGTH, hop_length=config.HOP_LENGTH, center=False, pad_mode="constant")
 
     return features, n_components_lst
 
@@ -230,5 +249,11 @@ def main(config):
 
 
 if __name__ == "__main__":
+    logging.info(f"Segment Duration: {Config.SEGMENT_DURATION} ms")
+    logging.info(f"Overlap Duration: {Config.OVERLAP_DURATION} ms")
+    logging.info(f"Sampling Frequency: {Config.SAMPLING_FREQUENCY} Hz")
+    logging.info(f"Number of MFCC Coefficients: {Config.N_MFCC}")
+    logging.info(f"Number of Spectral Contrast Bands: {Config.N_CONTRAST_BANDS}")
+    
     config = Config()
     main(config)
