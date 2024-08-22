@@ -18,6 +18,7 @@ runs
 *.txt
 mafaulda_subclasses_cascade.ipynb
 mimii*
+run_*
 test*.ipynb
 
 # temporary files and folders
