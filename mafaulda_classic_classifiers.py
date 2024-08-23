@@ -2,13 +2,18 @@ import argparse
 import gc
 import joblib
 import logging
+import os
+
+import matplotlib.pyplot as plt
+import numpy as np
+import pandas as pd
+import seaborn as sns
 
 from cuml.naive_bayes import BernoulliNB, GaussianNB, MultinomialNB
 from cuml.svm import LinearSVC, SVC
 
-import numpy as np
-
 from sklearn import metrics
+
 from mafaulda_metrics import *
 from mafaulda_naive_bayes import *
 from mafaulda_preprocessing import *
@@ -20,6 +25,7 @@ parser = argparse.ArgumentParser(description='Train a model on the given dataset
 parser.add_argument('-i', '--input_csv', type=str, default='data/mafaulda_main_classes_24khz_500ms_20ms_40-mfcc.csv',  help='Path to the dataset CSV file.')
 parser.add_argument('-m', '--model', type=str, default='svm_rbf', choices=['nb_bernoulli', 'nb_gaussian', 'nb_multinomial', 'svm_linear', 'svm_poly', 'svm_rbf', 'svm_sigmoid'], help='Model to train.')
 parser.add_argument('-f', '--features', type=str, default='mfcc', choices=['mfcc'], help='Features to use.')
+parser.add_argument('-S', '--scaling_method', type=str, default='RobustScaler', choices=['StandardScaler', 'RobustScaler', 'MinMaxScaler'], help='Scaling method to use.')
 parser.add_argument('-t', '--test_size', type=float, default=0.2, help='Size of the test set.')
 parser.add_argument('-s', '--seed', type=int, default=42, help='Random seed.')
 parser.add_argument('-a', '--augment_samples', type=int, default=6000, help='Number of samples to augment.')
@@ -32,6 +38,7 @@ args = parser.parse_args()
 INPUT_CSV       = args.input_csv
 MODEL           = args.model
 FEATURES        = args.features
+SCALING_METHOD  = args.scaling_method
 TEST_SIZE       = args.test_size
 SEED            = args.seed
 AUGMENT_SAMPLES = args.augment_samples
@@ -49,8 +56,22 @@ df = data_reading(csv_file=INPUT_CSV, features_columns=FEATURES_LIST)
 # Data preparation
 logging.info('Preparing the data...')
 sampling_strategy = {i: AUGMENT_SAMPLES for i in range(6)}
-df = data_preparation(df=data_cleaning(df), columns_to_drop=['filename', 'class', 'label', 'source'], sampling_strategy=sampling_strategy, scaling_method='RobustScaler', random_state=SEED)
+df = data_preparation(df=data_cleaning(df), columns_to_drop=['filename', 'class', 'label', 'source'], sampling_strategy=sampling_strategy, scaling_method=SCALING_METHOD, random_state=SEED)
 X_train, y_train, X_test, y_test = data_splitting(df, test_size=TEST_SIZE, random_state=SEED)
+
+# Model-specific name additions
+model_name = MODEL
+if 'svm' in MODEL:
+    model_name += f'_C{C_PARAM}'
+    if MODEL == 'svm_poly':
+        model_name += f'_degree{DEGREE_PARAM}'
+elif 'nb' in MODEL:
+    if MODEL == 'nb_bernoulli':
+        model_name += '_Bernoulli'
+    elif MODEL == 'nb_gaussian':
+        model_name += '_Gaussian'
+    elif MODEL == 'nb_multinomial':
+        model_name += '_Multinomial'
 
 # Model training
 logging.info('Training the model...')
@@ -98,9 +119,40 @@ logging.info(f'Recall: {recall:.4f}')
 logging.info(f'F1: {f1:.4f}')
 logging.info(f'F-Beta: {fbeta:.4f}')
 
+# Generate and save confusion matrix figure
+logging.info('Generating confusion matrix...')
+cm = metrics.confusion_matrix(y_test, y_pred)
+plt.figure(figsize=(5, 5))
+sns.heatmap(cm, annot=True, fmt='d', cmap="YlGn", cbar=False)
+plt.xlabel('Predicted')
+plt.ylabel('True')
+# plt.title('Confusion Matrix')
+
+# Save the confusion matrix figure as PDF
+os.makedirs('figures', exist_ok=True)
+confusion_matrix_filename = f'figures/confusion_matrix_{model_name}_{FEATURES}_{accuracy:.4f}.pdf'
+plt.savefig(confusion_matrix_filename, format='pdf', dpi=300, bbox_inches='tight')
+logging.info(f'Confusion matrix saved as {confusion_matrix_filename}')
+plt.close()
+
+# Save the metrics to a CSV file
+logging.info('Saving the metrics...')
+os.makedirs('metrics', exist_ok=True)
+metrics_filename = f'metrics/{model_name}_{FEATURES}_{accuracy:.4f}.csv'
+metrics_df = pd.DataFrame({
+    'Accuracy': [accuracy],
+    'Precision': [precision],
+    'Recall': [recall],
+    'F1': [f1],
+    'FBeta': [fbeta]
+})
+metrics_df.to_csv(metrics_filename, index=False)
+logging.info(f'Metrics saved as {metrics_filename}')
+
 # Save the model
 logging.info('Saving the model...')
-model_filename = f'models/{MODEL}_{FEATURES}_{accuracy:.2f}.pkl'
+os.makedirs('models', exist_ok=True)
+model_filename = f'models/{model_name}_{FEATURES}_{accuracy:.4f}.pkl'
 joblib.dump(model, model_filename)
 logging.info(f'Model saved as {model_filename}')
 
