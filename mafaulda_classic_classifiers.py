@@ -126,11 +126,10 @@ plt.figure(figsize=(5, 5))
 sns.heatmap(cm, annot=True, fmt='d', cmap="YlGn", cbar=False)
 plt.xlabel('Predicted')
 plt.ylabel('True')
-# plt.title('Confusion Matrix')
 
 # Save the confusion matrix figure as PDF
 os.makedirs('figures', exist_ok=True)
-confusion_matrix_filename = f'figures/confusion_matrix_{model_name}_{FEATURES}_{accuracy:.4f}.pdf'
+confusion_matrix_filename = f'figures/confusion_matrix_{model_name}_{FEATURES}_{fbeta:.4f}.pdf'
 plt.savefig(confusion_matrix_filename, format='pdf', dpi=300, bbox_inches='tight')
 logging.info(f'Confusion matrix saved as {confusion_matrix_filename}')
 plt.close()
@@ -138,7 +137,7 @@ plt.close()
 # Save the metrics to a CSV file
 logging.info('Saving the metrics...')
 os.makedirs('metrics', exist_ok=True)
-metrics_filename = f'metrics/{model_name}_{FEATURES}_{accuracy:.4f}.csv'
+metrics_filename = f'metrics/{model_name}_{FEATURES}_{fbeta:.4f}.csv'
 metrics_df = pd.DataFrame({
     'Accuracy': [accuracy],
     'Precision': [precision],
@@ -152,9 +151,10 @@ logging.info(f'Metrics saved as {metrics_filename}')
 # Save the model
 logging.info('Saving the model...')
 os.makedirs('models', exist_ok=True)
-model_filename = f'models/{model_name}_{FEATURES}_{accuracy:.4f}.pkl'
+model_filename = f'models/{model_name}_{FEATURES}_{fbeta:.4f}.pkl'
 joblib.dump(model, model_filename)
 logging.info(f'Model saved as {model_filename}')
+print()
 
 # Clean up
 del model
